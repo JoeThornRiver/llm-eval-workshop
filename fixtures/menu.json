@@ -1,0 +1,85 @@
+[
+	{ "name": "Vanilla Scoop", "price": 2.2, "requiresContainer": true },
+	{ "name": "Chocolate Scoop", "price": 2.2, "requiresContainer": true },
+	{ "name": "Strawberry Scoop", "price": 2.2, "requiresContainer": true },
+	{ "name": "Pistachio Scoop", "price": 2.2, "requiresContainer": true },
+	{ "name": "Stracciatella Scoop", "price": 2.2, "requiresContainer": true },
+	{ "name": "Lemon Scoop", "price": 2.2, "requiresContainer": true },
+	{
+		"name": "Waffle Cone",
+		"price": 0,
+		"isContainer": true,
+		"addOns": [{ "name": "Cream" }, { "name": "Strawberry Sauce" }]
+	},
+	{
+		"name": "Cup",
+		"price": 0,
+		"isContainer": true,
+		"addOns": [{ "name": "Cream" }, { "name": "Strawberry Sauce" }]
+	},
+	{
+		"name": "Spaghetti Ice Cream",
+		"price": 9.5,
+		"addOns": [{ "name": "Cream" }, { "name": "Strawberry Sauce" }]
+	},
+	{ "name": "Stracciatella Sundae", "price": 10.5 },
+	{
+		"name": "Strawberry Sundae",
+		"price": 10.5,
+		"addOns": [{ "name": "Cream" }, { "name": "Strawberry Sauce" }]
+	},
+	{ "name": "Fruit Sundae", "price": 11.8 },
+	{
+		"name": "Small Milkshake",
+		"price": 5.9,
+		"optionGroups": [
+			{
+				"name": "Flavor",
+				"options": [
+					{ "name": "Vanilla" },
+					{ "name": "Chocolate" },
+					{ "name": "Strawberry" },
+					{ "name": "Pistachio" }
+				]
+			},
+			{ "name": "Milk", "options": [{ "name": "Oat Milk" }, { "name": "Almond Milk" }] }
+		]
+	},
+	{
+		"name": "Large Milkshake",
+		"price": 7.7,
+		"optionGroups": [
+			{
+				"name": "Flavor",
+				"options": [
+					{ "name": "Vanilla" },
+					{ "name": "Chocolate" },
+					{ "name": "Strawberry" },
+					{ "name": "Pistachio" }
+				]
+			},
+			{ "name": "Milk", "options": [{ "name": "Oat Milk" }, { "name": "Almond Milk" }] }
+		]
+	},
+	{
+		"name": "Cappuccino",
+		"price": 4.2,
+		"optionGroups": [
+			{
+				"name": "Milk",
+				"options": [{ "name": "Oat Milk" }, { "name": "Almond Milk" }, { "name": "Soy Milk" }]
+			}
+		]
+	},
+	{ "name": "Espresso", "price": 3.0 },
+	{ "name": "Crepe Nutella", "price": 8.5 },
+	{ "name": "Freshly Squeezed Orange Juice", "price": 5.5 },
+	{ "name": "Coca-Cola small (0.2 l)", "price": 3.6 },
+	{ "name": "Coca-Cola large (0.4 l)", "price": 4.9 },
+	{
+		"name": "Iced Tea small (0.2 l)",
+		"price": 3.6,
+		"optionGroups": [{ "name": "Flavor", "options": [{ "name": "Peach" }, { "name": "Lemon" }] }]
+	},
+	{ "name": "Mineral Water (0.25 l)", "price": 3.0 }
+]

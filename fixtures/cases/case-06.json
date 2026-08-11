@@ -1,0 +1,34 @@
+{
+  "id": "case-06",
+  "title": "Role violation: standalone item used as a scoop",
+  "transcript": "A spaghetti ice cream, please.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "container",
+        "id": "g1",
+        "container": {
+          "name": "Cup"
+        },
+        "scoops": [
+          {
+            "id": "s1",
+            "name": "Spaghetti Ice Cream"
+          }
+        ]
+      }
+    ]
+  },
+  "expected": {
+    "allowedItems": [
+      "Spaghetti Ice Cream",
+      "Cup"
+    ],
+    "expectClarification": false
+  },
+  "expectedFindings": [
+    "ROLE_VIOLATION"
+  ],
+  "note": "Every name resolves - but Spaghetti Ice Cream is a standalone item, not a scoop, and must never sit inside a container group."
+}

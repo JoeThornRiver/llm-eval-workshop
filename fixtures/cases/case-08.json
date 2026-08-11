@@ -1,0 +1,27 @@
+{
+  "id": "case-08",
+  "title": "Off-menu item silently dropped",
+  "transcript": "A banana split and a small coke.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "standalone",
+        "id": "g1",
+        "item": {
+          "name": "Coca-Cola small (0.2 l)"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "allowedItems": [
+      "Coca-Cola small (0.2 l)"
+    ],
+    "expectClarification": true
+  },
+  "expectedFindings": [
+    "MISSING_CLARIFICATION"
+  ],
+  "note": "There is no banana split on this menu. Dropping it without a word violates the off-menu rule - the customer thinks they ordered two things."
+}

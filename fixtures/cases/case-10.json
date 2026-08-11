@@ -1,0 +1,42 @@
+{
+  "id": "case-10",
+  "title": "Add-on the container does not offer",
+  "transcript": "Two lemon scoops in a cup with caramel sauce.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "container",
+        "id": "g1",
+        "container": {
+          "name": "Cup"
+        },
+        "scoops": [
+          {
+            "id": "s1",
+            "name": "Lemon Scoop"
+          },
+          {
+            "id": "s2",
+            "name": "Lemon Scoop"
+          }
+        ],
+        "addOns": [
+          "Caramel Sauce"
+        ]
+      }
+    ]
+  },
+  "expected": {
+    "allowedItems": [
+      "Cup",
+      "Lemon Scoop"
+    ],
+    "expectClarification": true
+  },
+  "expectedFindings": [
+    "INVALID_OPTION_OR_ADDON",
+    "MISSING_CLARIFICATION"
+  ],
+  "note": "Caramel Sauce is not in the Cup's add-on list, and the unavailable-extra rule requires a clarification."
+}

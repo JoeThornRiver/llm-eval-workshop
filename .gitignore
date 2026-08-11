@@ -1,0 +1,8 @@
+node_modules/
+
+# Local secrets — Bun loads `.env` automatically, so it must never be committed.
+.env
+.env.local
+
+.DS_Store
+*.log

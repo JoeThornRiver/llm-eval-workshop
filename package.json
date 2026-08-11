@@ -1,0 +1,20 @@
+{
+  "name": "llm-eval-workshop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hands-on workshop: building an eval suite for a non-deterministic LLM feature (voice order matching)",
+  "type": "module",
+  "scripts": {
+    "test": "bun test evals/01-deterministic",
+    "test:solutions": "bun test solutions",
+    "eval:judge": "bun run evals/02-judge/run-judge.ts",
+    "eval:redteam": "bun run evals/03-redteam/run-redteam.ts"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.0",
+    "typescript": "^5.5.0"
+  }
+}

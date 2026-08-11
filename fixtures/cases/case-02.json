@@ -1,0 +1,26 @@
+{
+  "id": "case-02",
+  "title": "Schema violation: missing discriminator",
+  "transcript": "A cappuccino, please.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "id": "g1",
+        "item": {
+          "name": "Cappuccino"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "allowedItems": [
+      "Cappuccino"
+    ],
+    "expectClarification": false
+  },
+  "expectedFindings": [
+    "SCHEMA_INVALID"
+  ],
+  "note": "The group is missing its `type` field. safeParse must fail; once it does, skip all other checks for this case."
+}

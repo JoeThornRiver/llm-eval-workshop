@@ -1,0 +1,31 @@
+{
+  "id": "case-09",
+  "title": "Option outside the allowed option group",
+  "transcript": "A small hazelnut milkshake.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "standalone",
+        "id": "g1",
+        "item": {
+          "name": "Small Milkshake"
+        },
+        "options": [
+          "Hazelnut"
+        ]
+      }
+    ],
+    "clarification": "We don't have hazelnut as a milkshake flavor - vanilla, chocolate, strawberry or pistachio?"
+  },
+  "expected": {
+    "allowedItems": [
+      "Small Milkshake"
+    ],
+    "expectClarification": true
+  },
+  "expectedFindings": [
+    "INVALID_OPTION_OR_ADDON"
+  ],
+  "note": "Contradictory output: the model asked the right question but ALSO set an option that is not in the Flavor group. Both halves matter."
+}

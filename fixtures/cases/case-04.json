@@ -1,0 +1,37 @@
+{
+  "id": "case-04",
+  "title": "Empty container group after a cancelled item",
+  "transcript": "A scoop of vanilla in a waffle cone - no wait, cancel that, just an espresso.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "container",
+        "id": "g1",
+        "container": {
+          "name": "Waffle Cone"
+        },
+        "scoops": []
+      },
+      {
+        "type": "standalone",
+        "id": "g2",
+        "item": {
+          "name": "Espresso"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "allowedItems": [
+      "Espresso",
+      "Waffle Cone",
+      "Vanilla Scoop"
+    ],
+    "expectClarification": false
+  },
+  "expectedFindings": [
+    "EMPTY_CONTAINER_GROUP"
+  ],
+  "note": "The model cancelled the scoop but kept the (now empty) waffle group. Rule: never emit a container group with no scoops."
+}

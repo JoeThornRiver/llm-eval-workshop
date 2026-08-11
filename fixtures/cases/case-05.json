@@ -1,0 +1,34 @@
+{
+  "id": "case-05",
+  "title": "Name does not resolve against the menu",
+  "transcript": "A scoop of choc in a cup.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "container",
+        "id": "g1",
+        "container": {
+          "name": "Cup"
+        },
+        "scoops": [
+          {
+            "id": "s1",
+            "name": "Choco Scoop"
+          }
+        ]
+      }
+    ]
+  },
+  "expected": {
+    "allowedItems": [
+      "Cup",
+      "Chocolate Scoop"
+    ],
+    "expectClarification": false
+  },
+  "expectedFindings": [
+    "UNRESOLVED_NAME"
+  ],
+  "note": "'Choco Scoop' is not a menu name. The rule says exact menu strings only - validateOrder would silently drop this at runtime, which is exactly why the eval must catch it earlier."
+}

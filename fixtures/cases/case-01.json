@@ -1,0 +1,41 @@
+{
+  "id": "case-01",
+  "title": "Happy path: shared waffle cone",
+  "transcript": "Two scoops of chocolate and one strawberry in a waffle cone, please.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "container",
+        "id": "g1",
+        "container": {
+          "name": "Waffle Cone"
+        },
+        "scoops": [
+          {
+            "id": "s1",
+            "name": "Chocolate Scoop"
+          },
+          {
+            "id": "s2",
+            "name": "Chocolate Scoop"
+          },
+          {
+            "id": "s3",
+            "name": "Strawberry Scoop"
+          }
+        ]
+      }
+    ]
+  },
+  "expected": {
+    "allowedItems": [
+      "Waffle Cone",
+      "Chocolate Scoop",
+      "Strawberry Scoop"
+    ],
+    "expectClarification": false
+  },
+  "expectedFindings": [],
+  "note": "Baseline. Everything about this output is fine - your checks must stay quiet."
+}

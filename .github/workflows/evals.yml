@@ -1,0 +1,103 @@
+# CI wiring for an eval suite — the 1:40 block of the workshop.
+#
+# The whole idea fits in one sentence: TIER BY COST. Free, deterministic
+# checks run on every commit and gate the merge. Paid checks that call a live
+# model run when someone asks for them or on a schedule, and gate on a
+# THRESHOLD rather than on perfection, because the thing under test is
+# non-deterministic and a single flaky case must never redden the build.
+name: evals
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Two entries, because the two live tiers deserve different cadences.
+    # Each job below matches on `github.event.schedule` to claim its own.
+    - cron: '17 3 * * *' # nightly  — Tier 2, the judge
+    - cron: '41 4 * * 1' # Mondays  — Tier 3, the red-team probes
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  # --- Tier 1 -------------------------------------------------------------
+  # Offline, free, milliseconds. This is the job that blocks a merge.
+  tier1-deterministic:
+    name: Tier 1 — deterministic checks (offline)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - name: Typecheck
+        run: bunx tsc --noEmit
+      # NOTE: we run `solutions`, not `evals/01-deterministic`.
+      # evals/01-deterministic is the ATTENDEE STARTER — 9 of its 13 cases
+      # fail on purpose, that is the exercise. In a real project this line
+      # would be `bun test`, pointing at your own implemented checks.
+      - name: Deterministic checks over the golden cases
+        run: bun test solutions
+
+  # --- Tier 2 -------------------------------------------------------------
+  # Live model + judge model. Costs cents, takes ~a minute, and is flaky by
+  # nature — so it never runs on a plain push. Opt in per PR with the
+  # `run-evals` label, or let the nightly schedule carry it.
+  tier2-judge:
+    name: Tier 2 — LLM-as-judge (live, threshold-gated)
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.schedule == '17 3 * * *' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' &&
+       contains(github.event.pull_request.labels.*.name, 'run-evals'))
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - name: Fail early with a readable message if the secret is missing
+        run: |
+          if [ -z "${OPENROUTER_API_KEY}" ]; then
+            echo "::error::OPENROUTER_API_KEY is not set for this repository." \
+                 "Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+      # The script's own exit code IS the gate: it exits 1 when the average
+      # score falls below PASS_THRESHOLD (see evals/02-judge/run-judge.ts).
+      - name: Judge run
+        run: bun run eval:judge
+
+  # --- Tier 3 -------------------------------------------------------------
+  # Adversarial probes. Same discipline as Tier 1 (transcript in, verdict
+  # out, exit code) pointed at hostile inputs. Weekly and before releases —
+  # injection surfaces change when the PROMPT changes, not when the code does.
+  tier3-redteam:
+    name: Tier 3 — red-team probes (live)
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.schedule == '41 4 * * 1' ||
+      github.event_name == 'workflow_dispatch'
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - name: Fail early with a readable message if the secret is missing
+        run: |
+          if [ -z "${OPENROUTER_API_KEY}" ]; then
+            echo "::error::OPENROUTER_API_KEY is not set for this repository." \
+                 "Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+      - name: Red-team probes
+        run: bun run eval:redteam

@@ -1,0 +1,34 @@
+{
+  "id": "case-03",
+  "title": "Flat-schema trap: standalone carrying container fields",
+  "transcript": "A small vanilla milkshake.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "standalone",
+        "id": "g1",
+        "item": {
+          "name": "Small Milkshake"
+        },
+        "options": [
+          "Vanilla"
+        ],
+        "container": {
+          "name": "Cup"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "allowedItems": [
+      "Small Milkshake"
+    ],
+    "expectClarification": false
+  },
+  "expectedFindings": [
+    "TYPE_FIELD_MISMATCH",
+    "HALLUCINATED_ITEM"
+  ],
+  "note": "Schema-valid! The flat schema (no oneOf) cannot forbid a standalone group that also carries a container. Your consistency check must catch it - and note that the spurious Cup is ALSO a hallucination (the customer never mentioned one), so two findings apply."
+}

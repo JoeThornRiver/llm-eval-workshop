@@ -1,0 +1,38 @@
+{
+  "id": "case-07",
+  "title": "Invented container instead of a clarification",
+  "transcript": "Two scoops of pistachio, please.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "container",
+        "id": "g1",
+        "container": {
+          "name": "Cup"
+        },
+        "scoops": [
+          {
+            "id": "s1",
+            "name": "Pistachio Scoop"
+          },
+          {
+            "id": "s2",
+            "name": "Pistachio Scoop"
+          }
+        ]
+      }
+    ]
+  },
+  "expected": {
+    "allowedItems": [
+      "Pistachio Scoop"
+    ],
+    "expectClarification": true
+  },
+  "expectedFindings": [
+    "HALLUCINATED_ITEM",
+    "MISSING_CLARIFICATION"
+  ],
+  "note": "No container was named, so the model must ask - never pick one. The invented Cup is a hallucination AND the required clarification is missing. Only the golden labels can catch this: no structural check knows what the customer said."
+}

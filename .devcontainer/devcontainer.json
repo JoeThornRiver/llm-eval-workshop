@@ -1,0 +1,25 @@
+{
+	"name": "LLM Eval Workshop",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+	// Bun is installed by the official script rather than a community
+	// devcontainer feature: one less third-party registry between 20 attendees
+	// and a working environment at 09:00.
+	"onCreateCommand": "bash .devcontainer/install-bun.sh",
+	"postCreateCommand": "bun install",
+	"remoteEnv": {
+		"PATH": "/home/vscode/.bun/bin:${containerEnv:PATH}"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": ["oven.bun-vscode"],
+			"settings": {
+				"editor.formatOnSave": false,
+				"files.eol": "\n"
+			}
+		}
+	}
+	// OPENROUTER_API_KEY is NOT declared here. In Codespaces it is injected as
+	// a repository secret; locally it comes from `.env` (see .env.example).
+	// Declaring it as a remoteEnv passthrough would overwrite the Codespaces
+	// secret with an empty string on hosts that do not have it set.
+}

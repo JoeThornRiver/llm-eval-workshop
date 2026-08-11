@@ -1,0 +1,27 @@
+{
+  "id": "case-12",
+  "title": "Happy path: correct clarification for a container-less scoop",
+  "transcript": "A chocolate scoop and a fruit sundae.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "standalone",
+        "id": "g1",
+        "item": {
+          "name": "Fruit Sundae"
+        }
+      }
+    ],
+    "clarification": "Would you like the chocolate scoop in a waffle cone or in a cup?"
+  },
+  "expected": {
+    "allowedItems": [
+      "Fruit Sundae",
+      "Chocolate Scoop"
+    ],
+    "expectClarification": true
+  },
+  "expectedFindings": [],
+  "note": "Model behaves exactly as the policy demands: resolved item kept, container-less scoop held back, clarification asked."
+}

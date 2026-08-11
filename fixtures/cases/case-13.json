@@ -1,0 +1,25 @@
+{
+  "id": "case-13",
+  "title": "Happy path: compound name is a standalone item, not a container",
+  "transcript": "A stracciatella sundae, please.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "standalone",
+        "id": "g1",
+        "item": {
+          "name": "Stracciatella Sundae"
+        }
+      }
+    ]
+  },
+  "expected": {
+    "allowedItems": [
+      "Stracciatella Sundae"
+    ],
+    "expectClarification": false
+  },
+  "expectedFindings": [],
+  "note": "'Sundae' contains no container semantics here - the model correctly matched the compound menu item instead of decomposing it into scoop + cup."
+}

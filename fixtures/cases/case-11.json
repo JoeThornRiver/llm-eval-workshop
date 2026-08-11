@@ -1,0 +1,38 @@
+{
+  "id": "case-11",
+  "title": "Hallucinated scoop",
+  "transcript": "One scoop of vanilla in a cup.",
+  "currentOrder": [],
+  "recorded": {
+    "order": [
+      {
+        "type": "container",
+        "id": "g1",
+        "container": {
+          "name": "Cup"
+        },
+        "scoops": [
+          {
+            "id": "s1",
+            "name": "Vanilla Scoop"
+          },
+          {
+            "id": "s2",
+            "name": "Strawberry Scoop"
+          }
+        ]
+      }
+    ]
+  },
+  "expected": {
+    "allowedItems": [
+      "Cup",
+      "Vanilla Scoop"
+    ],
+    "expectClarification": false
+  },
+  "expectedFindings": [
+    "HALLUCINATED_ITEM"
+  ],
+  "note": "Schema-valid, names resolve, structure is fine - and the customer never ordered strawberry. Golden labels are the only net that catches this."
+}
