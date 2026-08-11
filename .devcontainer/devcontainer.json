@@ -1,11 +1,21 @@
 {
 	"name": "LLM Eval Workshop",
 	"image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+	"features": {
+		// The base image ships no SSH server, so `gh codespace ssh` cannot
+		// attach. Browser and VS Code attendees never need it — a trainer
+		// debugging someone's container from a terminal does.
+		"ghcr.io/devcontainers/features/sshd:1": {}
+	},
 	// Bun is installed by the official script rather than a community
 	// devcontainer feature: one less third-party registry between 20 attendees
 	// and a working environment at 09:00.
 	"onCreateCommand": "bash .devcontainer/install-bun.sh",
-	"postCreateCommand": "bun install",
+	// Absolute path on purpose. `remoteEnv` below is documented to apply to
+	// the user's shell; relying on it to also reach lifecycle scripts would
+	// make `bun install` a coin flip, and a failed postCreate leaves
+	// attendees with no node_modules and no obvious reason why.
+	"postCreateCommand": "$HOME/.bun/bin/bun install",
 	"remoteEnv": {
 		"PATH": "/home/vscode/.bun/bin:${containerEnv:PATH}"
 	},
