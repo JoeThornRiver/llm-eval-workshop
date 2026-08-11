@@ -78,6 +78,7 @@ evals/
   02-judge/              Tier 2 — judge harness (rubric is the exercise)
   03-redteam/            adversarial probes with verdict functions
   04-compare/            Tier 4 — one eval set vs many models (post-workshop)
+  05-calibrate/          Tier 5 — is the judge worth trusting? (post-workshop)
 solutions/               full solutions — no peeking before you're green
   checks.ts              the Tier 1 checks as a module (Tier 4 imports these)
   rubric.ts              the calibrated judge rubric (Tier 4 imports this)
@@ -105,6 +106,20 @@ Recorded runs for three models ship in `evals/04-compare/results/`, so the
 comparison works before you spend a cent. Read
 `evals/04-compare/README.md` — including why one of those three models cannot
 run this eval set at all, for reasons that have nothing to do with quality.
+
+`evals/05-calibrate/` is the step that has to come FIRST in practice, even
+though it is numbered later: it measures whether the judge actually
+distinguishes good output from bad, against human labels, and refuses to
+certify it otherwise.
+
+```bash
+bun run eval:calibrate                            # verdict + exit code
+bun run eval:calibrate -- --rubric placeholder    # proof the metric bites
+```
+
+On the shipped synthetic labels the calibrated rubric beats the placeholder on
+every metric — and still fails the gate, for one instructive reason. See
+`evals/05-calibrate/README.md`.
 
 ## Design notes for trainers
 

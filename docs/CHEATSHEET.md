@@ -9,6 +9,7 @@
 | Quality that needs judgment (helpfulness, tone, reasonableness) | LLM-as-judge with rubric | PRs / nightly | cents per run | clarification quality |
 | Robustness against adversarial input | Red-team probes with verdict functions | nightly / pre-release | cents per run | transcript injection |
 | Whether a DIFFERENT model can run your software | Same eval set, many models + versioned artifacts | on request / per candidate | cents per model | `evals/04-compare/` |
+| Whether your JUDGE can be trusted at all | Judge vs human labels: κ, inversions, severe recall | before trusting a judge; on every judge change | cents per run | `evals/05-calibrate/` |
 
 ## The seven rules that keep eval suites alive
 
@@ -24,7 +25,9 @@
    correctness.
 5. **Judges get rubrics with anchors and hard caps — and get calibrated
    against human labels** before any CI gate trusts them. Re-calibrate on
-   every judge-model change.
+   every judge-model change. Measure it: weighted κ for ordering, *inversions*
+   for missing criteria, and recall on the cases humans failed — an average
+   hides a missed disaster (`evals/05-calibrate/`).
 6. **Log model + prompt + eval-set versions with every score.** A score
    without its versions is a number without meaning. Corollary: a comparison
    tool should *refuse* runs that disagree on those versions, not print a

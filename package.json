@@ -10,7 +10,8 @@
     "eval:judge": "bun run evals/02-judge/run-judge.ts",
     "eval:redteam": "bun run evals/03-redteam/run-redteam.ts",
     "eval:model": "bun run evals/04-compare/run-model.ts",
-    "eval:compare": "bun run evals/04-compare/compare.ts"
+    "eval:compare": "bun run evals/04-compare/compare.ts",
+    "eval:calibrate": "bun run evals/05-calibrate/run-calibrate.ts"
   },
   "dependencies": {
     "zod": "^3.23.8"

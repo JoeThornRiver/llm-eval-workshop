@@ -1,0 +1,72 @@
+{
+	"labelSetVersion": "synthetic-v1",
+	"provenance": "SYNTHETIC. These scores were derived by applying the anchors in solutions/rubric.ts to each fixture's KNOWN defect list — they are not blind human judgements. See README.md for what that does and does not prove, and replace this file with real labels before trusting a judge in production.",
+	"scale": "1-5, anchors as defined in solutions/rubric.ts",
+	"labels": [
+		{
+			"caseId": "case-01",
+			"humanScore": 5,
+			"rationale": "Faithful, container policy respected, no clarification needed, exact names. All four criteria met."
+		},
+		{
+			"caseId": "case-02",
+			"humanScore": 2,
+			"rationale": "Missing `type` makes the output unparseable, so the system gets nothing — worse than a cosmetic naming lapse. Note the rubric has NO anchor for unparseable output: criteria 1-2 are technically met, which would argue for 3+. Labeled 2 on consequence. This is a genuine gap in the rubric, not in the model."
+		},
+		{
+			"caseId": "case-03",
+			"humanScore": 2,
+			"rationale": "The ordered item and flavor are right, but a Cup the customer never mentioned appears alongside it. Hallucinated item fails criterion 1, so the hard cap applies. Not a 1, because the substance of the order is correct."
+		},
+		{
+			"caseId": "case-04",
+			"humanScore": 3,
+			"rationale": "Espresso is right and the cancellation was understood; what remains is an empty container group. No hallucination (the cone WAS named), no clarification owed. The anchors do not cover an empty group either — labeled 3 as a structural defect with no customer-visible loss."
+		},
+		{
+			"caseId": "case-05",
+			"humanScore": 2,
+			"rationale": "'Choco Scoop' does not resolve, so at runtime the scoop silently vanishes and the customer does not get what they ordered. That is anchor 2: an ordered item dropped without a clarification."
+		},
+		{
+			"caseId": "case-06",
+			"humanScore": 2,
+			"rationale": "A standalone item placed inside a container group, and the Cup was never mentioned. Criterion 2 fails and a container was invented — anchor 2."
+		},
+		{
+			"caseId": "case-07",
+			"humanScore": 2,
+			"rationale": "No container was named, so the model had to ask; instead it picked one. Anchor 2 literally: a container was invented."
+		},
+		{
+			"caseId": "case-08",
+			"humanScore": 3,
+			"rationale": "The coke is right. The banana split is NOT on the menu, so criterion 1's 'dropped an on-menu item' does not strictly apply — but the off-menu rule demands a clarification and none came. Anchor 3."
+		},
+		{
+			"caseId": "case-09",
+			"humanScore": 3,
+			"rationale": "The clarification is genuinely good and specific, but the output also sets Hazelnut, which is not in the Flavor group. Anchor 3: an option rule violated with criteria 1-2 intact."
+		},
+		{
+			"caseId": "case-10",
+			"humanScore": 3,
+			"rationale": "Scoops and container are right. Caramel Sauce is not offered on a Cup, and the unavailable-extra rule requires a clarification that is missing. Both halves sit under anchor 3."
+		},
+		{
+			"caseId": "case-11",
+			"humanScore": 1,
+			"rationale": "A Strawberry Scoop the customer never ordered. Anchor 1: hallucinated item, and the customer would be charged for it."
+		},
+		{
+			"caseId": "case-12",
+			"humanScore": 5,
+			"rationale": "Exactly the policy: resolved item kept, container-less scoop withheld, one specific clarification asked."
+		},
+		{
+			"caseId": "case-13",
+			"humanScore": 5,
+			"rationale": "Compound menu item matched instead of decomposed into scoop + container. All criteria met."
+		}
+	]
+}
