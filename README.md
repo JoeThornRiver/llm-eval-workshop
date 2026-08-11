@@ -113,13 +113,17 @@ distinguishes good output from bad, against human labels, and refuses to
 certify it otherwise.
 
 ```bash
-bun run eval:calibrate                            # verdict + exit code
-bun run eval:calibrate -- --rubric placeholder    # proof the metric bites
+bun run eval:calibrate -- --rubric placeholder    # measures nothing: κ 0.37
+bun run eval:calibrate                            # taught rubric: κ 0.60, FAILS
+bun run eval:calibrate -- --rubric v2             # one sentence later: PASSES
 ```
 
-On the shipped synthetic labels the calibrated rubric beats the placeholder on
-every metric — and still fails the gate, for one instructive reason. See
-`evals/05-calibrate/README.md`.
+Run in that order, those three commands are the whole argument: a rubric that
+measures nothing, the taught rubric that beats it on every metric and still
+fails its gate, and the rubric that failure produced — differing from the
+previous one by a single added criterion. Roughly four minutes, under a euro.
+`evals/05-calibrate/README.md` has the numbers and the one disagreement that
+survives every version.
 
 ## Design notes for trainers
 

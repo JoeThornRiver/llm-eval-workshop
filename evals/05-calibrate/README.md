@@ -5,10 +5,16 @@ defend"*. Nothing in this repo earns the right to gate a release on a judge
 score until this passes.
 
 ```bash
-bun run eval:calibrate                              # the calibrated rubric
+bun run eval:calibrate                              # v1, the Hands-on 2 answer
 bun run eval:calibrate -- --rubric placeholder      # prove the metric bites
+bun run eval:calibrate -- --rubric v2               # after one turn of the loop
 bun run eval:calibrate -- --judge openai/gpt-5.6-luna --repeats 5
 ```
+
+Those first three commands are the demo: a rubric that measures nothing, the
+taught rubric that measures a lot and still fails its gate, and the rubric
+that failure produced. Run in that order it takes about four minutes and costs
+under a euro.
 
 It judges the **recorded** outputs in `fixtures/cases/*.json`, not live ones, so
 the model output is held constant and the judge is the only variable. Exit code
@@ -57,25 +63,34 @@ Two structural limits of this label set, both printed by the run itself:
 
 Sonnet 5, three repeats per case, temperature 0:
 
-| metric | calibrated rubric | placeholder rubric | threshold |
-|---|---|---|---|
-| exact agreement | 69% | 31% | — |
-| mean abs error | 0.69 | 1.08 | — |
-| Spearman ρ | 0.49 | 0.27 | — |
-| weighted κ | 0.60 | 0.37 | ≥ 0.60 |
-| severe inversions | **0** | **5** | 0 |
-| severe recall | 0.67 | 0.33 | ≥ 0.80 |
-| self-agreement | 77% | 69% | — |
+| metric | placeholder | v1 (taught) | v2 (after the loop) | threshold |
+|---|---|---|---|---|
+| exact agreement | 31% | 69% | **85%** | — |
+| within 1 point | 77% | 69% | 85% | — |
+| offset (judge − human) | +0.15 | +0.08 | +0.08 | — |
+| mean abs error | 1.08 | 0.69 | **0.38** | — |
+| Spearman ρ | 0.27 | 0.49 | **0.68** | — |
+| weighted κ | 0.37 | 0.60 | **0.73** | ≥ 0.60 |
+| severe inversions | **5** | 0 | 0 | 0 |
+| severe recall | 0.33 | 0.67 | **0.83** | ≥ 0.80 |
+| judge self-agreement | 69% | 77% | **92%** | — |
+| **verdict** | NOT USABLE | NOT USABLE | **USABLE** | — |
 
-**Both verdicts are NOT USABLE.** The calibrated rubric is better on every
-single metric and still fails, on exactly one criterion: severe recall.
+Three things in that table are worth more than the verdict.
 
-That the placeholder produces five severe inversions is the demonstration
-worth showing: it ranked `case-12` — the output that follows the container
-policy perfectly — *below* `case-02`, which is not even parseable. A rubric
-that does that will happily green-light a release.
+**The placeholder produces five severe inversions.** It ranked `case-12` — the
+output that follows the container policy perfectly — *below* `case-02`, which
+is not even parseable. A rubric that does that will green-light anything.
 
-## Why the good rubric fails, and the two different fixes
+**v1 is better than the placeholder on every single metric and still fails**,
+on exactly one criterion: severe recall. "Better than useless" is not a
+standard; the gate is.
+
+**v2 differs from v1 by one sentence.** Not a threshold, not a judge upgrade,
+not more repeats — one added criterion. That is what a well-built rubric looks
+like when it is wrong: fixable by naming the missing criterion.
+
+## Why v1 fails, and the two different fixes
 
 The entire verdict hinges on two cases, and they fail for opposite reasons.
 
@@ -84,8 +99,9 @@ not a menu string, so at runtime the scoop silently vanishes and the customer
 does not get what they ordered. The judge called it a minor lapse. The menu
 *is* in the judge's prompt, so this is a **rubric-weighting failure**: anchor 4
 says "a cosmetic naming issue that still resolves", and the judge stretched it
-to a name that does not resolve. Fixable in the rubric — split that anchor so a
-non-resolving name falls under the hard cap.
+to a name that does not resolve. Fixable in the rubric — **this is what v2
+fixes**, and it moved the score 4 → 2, which is the single change that carries
+the verdict from failing to passing.
 
 **`case-02` — human 2, judge 5.** The group is missing its `type` field, so the
 output is unparseable and the consuming system gets nothing. The judge scored
@@ -106,6 +122,33 @@ three cases clear the gate, and all three are labeled 5 — not enough spread to
 calibrate on, which is another way of saying **your calibration set needs
 outputs that are flawed in ways only a human can weigh**, not outputs that a
 parser can reject.
+
+## What writing v2 taught us that the metrics did not
+
+Two things happened while iterating on that one sentence, and both are the
+reason you re-run the whole calibration rather than checking the case you aimed
+at.
+
+**The first draft over-reached.** It read "a name that is not an exact menu
+string counts as dropped", which is true of item names — and also caught
+*option* and *add-on* names, which this rubric deliberately puts at anchor 3.
+`case-09` (Hazelnut) and `case-10` (Caramel Sauce) both fell from a correct 3
+to a 2. Exact agreement dropped to 69% even though the target case was fixed.
+Scoping the clause to item, container and scoop names — and saying explicitly
+that a bad option or add-on name is criterion 4 — recovered both cases and took
+exact agreement to 85%. **A rubric edit is a prompt change: it moves cases you
+were not aiming at.**
+
+**One disagreement survives every version: `case-04`.** The empty container
+group. Our label says 3 (the espresso is right, the leftover group harms
+nobody), the judge says 1 or 2 depending on the wording — it reads a
+structurally broken order as severe. Neither is obviously right, and the
+rubric has no anchor for "invalid but customer-harmless". That is not a bug to
+fix in the judge; it is a **question for whoever owns the labels**, and it is
+exactly the kind of question this harness exists to surface. Notice the
+temptation it creates: our label is synthetic, so the cheapest way to make the
+number look better would be to change the label. Do not — that is how a
+calibration set stops measuring anything.
 
 ## What to do with a failing calibration
 

@@ -32,7 +32,12 @@ import { readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { parseArgs } from 'node:util';
-import { CALIBRATED_RUBRIC, RUBRIC_ID } from '../../solutions/rubric';
+import {
+	CALIBRATED_RUBRIC,
+	CALIBRATED_RUBRIC_V2,
+	RUBRIC_ID,
+	RUBRIC_V2_ID
+} from '../../solutions/rubric';
 import type { GoldenExpectation } from '../../solutions/checks';
 import { judgeOutput } from '../04-compare/judge';
 import { inversions, mean, median, quadraticWeightedKappa, spearman, stdDev } from './stats';
@@ -61,9 +66,19 @@ const { values } = parseArgs({
 const judgeModel = values.judge!;
 const repeats = Number(values.repeats);
 const concurrency = Number(values.concurrency);
-const useCalibrated = values.rubric !== 'placeholder';
-const rubric = useCalibrated ? CALIBRATED_RUBRIC : PLACEHOLDER_RUBRIC;
-const rubricId = useCalibrated ? RUBRIC_ID : 'placeholder-hands-on-2-starter';
+// --rubric calibrated (default, the Hands-on 2 answer) | v2 | placeholder
+const RUBRICS: Record<string, { id: string; text: string }> = {
+	calibrated: { id: RUBRIC_ID, text: CALIBRATED_RUBRIC },
+	v2: { id: RUBRIC_V2_ID, text: CALIBRATED_RUBRIC_V2 },
+	placeholder: { id: 'placeholder-hands-on-2-starter', text: PLACEHOLDER_RUBRIC }
+};
+const chosen = RUBRICS[values.rubric!];
+if (!chosen) {
+	console.error(`--rubric must be one of: ${Object.keys(RUBRICS).join(', ')}`);
+	process.exit(2);
+}
+const rubric = chosen.text;
+const rubricId = chosen.id;
 
 // --- Thresholds the verdict gates on. Documented, not magic. ---------------
 const MIN_KAPPA = 0.6; // below this the judge is not tracking the human
