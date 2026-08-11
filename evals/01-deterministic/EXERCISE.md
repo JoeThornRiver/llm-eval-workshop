@@ -42,8 +42,15 @@ teaches one concept:
 
 ## When you are green
 
-Compare your implementation with `solutions/01-deterministic.solution.test.ts`.
-Different implementations are fine; identical finding sets are the contract.
+Compare your implementation with `solutions/checks.ts` (the test file next to
+it is only the assertion loop). Different implementations are fine; identical
+finding sets are the contract.
+
+Those same functions get a second life in `evals/04-compare/`, where they run
+against the LIVE output of candidate models — the cheapest possible answer to
+"can we run on this new LLM?". Note the semantic shift: a fixture's
+`expectedFindings` describes the defects planted in that recording, but for a
+live run the expectation is always zero findings.
 
 Then discuss with your pair:
 

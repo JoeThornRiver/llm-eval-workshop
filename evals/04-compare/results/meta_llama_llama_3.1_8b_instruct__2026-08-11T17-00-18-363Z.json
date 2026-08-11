@@ -1,0 +1,822 @@
+{
+  "schemaVersion": 2,
+  "candidateModel": "meta-llama/llama-3.1-8b-instruct",
+  "judgeModel": "anthropic/claude-sonnet-5",
+  "rubricId": "calibrated-v1",
+  "rubricHash": "sha256:6aac5295c604c434",
+  "promptHash": "sha256:ee8e2037e5d30011",
+  "evalSetHash": "sha256:b115df04913854c3",
+  "caseCount": 13,
+  "repeats": 2,
+  "temperature": 0,
+  "startedAt": "2026-08-11T17:00:18.363Z",
+  "finishedAt": "2026-08-11T17:01:34.779Z",
+  "summary": {
+    "calls": 26,
+    "errors": 0,
+    "compatible": true,
+    "gatePassRate": 0.5384615384615384,
+    "defectCounts": {
+      "HALLUCINATED_ITEM": 8,
+      "INVALID_OPTION_OR_ADDON": 4,
+      "UNRESOLVED_NAME": 2,
+      "ROLE_VIOLATION": 2
+    },
+    "judgeMean": 2.3076923076923075,
+    "judgeStdDev": 1.5170822197687446,
+    "judgeScored": 26,
+    "meanLatencyMs": 967,
+    "p95LatencyMs": 1736,
+    "candidateCostUsd": 0.013300320000000001,
+    "judgeCostUsd": 0.258068,
+    "totalCostUsd": 0.27136832,
+    "costPer1kOrdersUsd": 0.5115507692307693,
+    "unstableCases": []
+  },
+  "cases": [
+    {
+      "caseId": "case-01",
+      "repeat": 0,
+      "findings": [
+        "HALLUCINATED_ITEM",
+        "INVALID_OPTION_OR_ADDON"
+      ],
+      "judgeScore": 1,
+      "latencyMs": 1736,
+      "promptTokens": 2258,
+      "completionTokens": 191,
+      "costUsd": 0.00053878,
+      "judgeCostUsd": 0.006582,
+      "output": {
+        "order": [
+          {
+            "type": "container",
+            "id": "g1",
+            "container": {
+              "name": "Waffle Cone"
+            },
+            "scoops": [
+              {
+                "id": "s1",
+                "name": "Chocolate Scoop"
+              },
+              {
+                "id": "s2",
+                "name": "Chocolate Scoop"
+              },
+              {
+                "id": "s3",
+                "name": "Strawberry Scoop"
+              }
+            ]
+          },
+          {
+            "type": "standalone",
+            "id": "g2",
+            "item": {
+              "name": "Small Milkshake"
+            },
+            "options": [
+              "Vanilla",
+              "Chocolate",
+              "Strawberry",
+              "Pistachio"
+            ],
+            "addOns": [
+              "Oat Milk",
+              "Almond Milk"
+            ]
+          }
+        ],
+        "clarification": "Would you like the two pistachio scoops in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-01",
+      "repeat": 1,
+      "findings": [
+        "HALLUCINATED_ITEM",
+        "INVALID_OPTION_OR_ADDON"
+      ],
+      "judgeScore": 1,
+      "latencyMs": 1689,
+      "promptTokens": 2258,
+      "completionTokens": 191,
+      "costUsd": 0.00053878,
+      "judgeCostUsd": 0.008952,
+      "output": {
+        "order": [
+          {
+            "type": "container",
+            "id": "g1",
+            "container": {
+              "name": "Waffle Cone"
+            },
+            "scoops": [
+              {
+                "id": "s1",
+                "name": "Chocolate Scoop"
+              },
+              {
+                "id": "s2",
+                "name": "Chocolate Scoop"
+              },
+              {
+                "id": "s3",
+                "name": "Strawberry Scoop"
+              }
+            ]
+          },
+          {
+            "type": "standalone",
+            "id": "g2",
+            "item": {
+              "name": "Small Milkshake"
+            },
+            "options": [
+              "Vanilla",
+              "Chocolate",
+              "Strawberry",
+              "Pistachio"
+            ],
+            "addOns": [
+              "Oat Milk",
+              "Almond Milk"
+            ]
+          }
+        ],
+        "clarification": "Would you like the two pistachio scoops in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-02",
+      "repeat": 0,
+      "findings": [],
+      "judgeScore": 1,
+      "latencyMs": 751,
+      "promptTokens": 2249,
+      "completionTokens": 31,
+      "costUsd": 0.0005016,
+      "judgeCostUsd": 0.008318,
+      "output": {
+        "order": [],
+        "clarification": "Would you like the cappuccino with oat milk, almond milk, or soy milk?"
+      }
+    },
+    {
+      "caseId": "case-02",
+      "repeat": 1,
+      "findings": [],
+      "judgeScore": 1,
+      "latencyMs": 998,
+      "promptTokens": 2249,
+      "completionTokens": 31,
+      "costUsd": 0.0005016,
+      "judgeCostUsd": 0.006538,
+      "output": {
+        "order": [],
+        "clarification": "Would you like the cappuccino with oat milk, almond milk, or soy milk?"
+      }
+    },
+    {
+      "caseId": "case-03",
+      "repeat": 0,
+      "findings": [],
+      "judgeScore": 4,
+      "latencyMs": 817,
+      "promptTokens": 2247,
+      "completionTokens": 34,
+      "costUsd": 0.00050182,
+      "judgeCostUsd": 0.01181,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Small Milkshake"
+            },
+            "options": [
+              "Vanilla"
+            ]
+          }
+        ],
+        "clarification": ""
+      }
+    },
+    {
+      "caseId": "case-03",
+      "repeat": 1,
+      "findings": [],
+      "judgeScore": 4,
+      "latencyMs": 589,
+      "promptTokens": 2247,
+      "completionTokens": 34,
+      "costUsd": 0.00050182,
+      "judgeCostUsd": 0.0107,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Small Milkshake"
+            },
+            "options": [
+              "Vanilla"
+            ]
+          }
+        ],
+        "clarification": ""
+      }
+    },
+    {
+      "caseId": "case-04",
+      "repeat": 0,
+      "findings": [],
+      "judgeScore": 3,
+      "latencyMs": 859,
+      "promptTokens": 2261,
+      "completionTokens": 64,
+      "costUsd": 0.0005115,
+      "judgeCostUsd": 0.01144,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Espresso"
+            }
+          }
+        ],
+        "clarification": "Would you like the vanilla scoop in a waffle cone, in a cup, or would you like to choose a different container?"
+      }
+    },
+    {
+      "caseId": "case-04",
+      "repeat": 1,
+      "findings": [],
+      "judgeScore": 3,
+      "latencyMs": 808,
+      "promptTokens": 2261,
+      "completionTokens": 64,
+      "costUsd": 0.0005115,
+      "judgeCostUsd": 0.01191,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Espresso"
+            }
+          }
+        ],
+        "clarification": "Would you like the vanilla scoop in a waffle cone, in a cup, or would you like to choose a different container?"
+      }
+    },
+    {
+      "caseId": "case-05",
+      "repeat": 0,
+      "findings": [
+        "HALLUCINATED_ITEM"
+      ],
+      "judgeScore": 1,
+      "latencyMs": 2043,
+      "promptTokens": 2250,
+      "completionTokens": 110,
+      "costUsd": 0.0005192,
+      "judgeCostUsd": 0.007644,
+      "output": {
+        "order": [
+          {
+            "type": "container",
+            "id": "g1",
+            "container": {
+              "name": "Cup"
+            },
+            "scoops": [
+              {
+                "id": "s1",
+                "name": "Chocolate Scoop"
+              }
+            ]
+          },
+          {
+            "type": "standalone",
+            "id": "g2",
+            "item": {
+              "name": "Small Milkshake"
+            },
+            "options": [
+              "Chocolate"
+            ]
+          }
+        ],
+        "clarification": "Would you like the chocolate scoop in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-05",
+      "repeat": 1,
+      "findings": [
+        "HALLUCINATED_ITEM"
+      ],
+      "judgeScore": 1,
+      "latencyMs": 1513,
+      "promptTokens": 2250,
+      "completionTokens": 110,
+      "costUsd": 0.0005192,
+      "judgeCostUsd": 0.007234,
+      "output": {
+        "order": [
+          {
+            "type": "container",
+            "id": "g1",
+            "container": {
+              "name": "Cup"
+            },
+            "scoops": [
+              {
+                "id": "s1",
+                "name": "Chocolate Scoop"
+              }
+            ]
+          },
+          {
+            "type": "standalone",
+            "id": "g2",
+            "item": {
+              "name": "Small Milkshake"
+            },
+            "options": [
+              "Chocolate"
+            ]
+          }
+        ],
+        "clarification": "Would you like the chocolate scoop in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-06",
+      "repeat": 0,
+      "findings": [],
+      "judgeScore": 1,
+      "latencyMs": 725,
+      "promptTokens": 2248,
+      "completionTokens": 44,
+      "costUsd": 0.00050424,
+      "judgeCostUsd": 0.012642,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Spaghetti Ice Cream"
+            }
+          }
+        ],
+        "clarification": "Would you like the lemon scoop in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-06",
+      "repeat": 1,
+      "findings": [],
+      "judgeScore": 1,
+      "latencyMs": 709,
+      "promptTokens": 2248,
+      "completionTokens": 44,
+      "costUsd": 0.00050424,
+      "judgeCostUsd": 0.012472,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Spaghetti Ice Cream"
+            }
+          }
+        ],
+        "clarification": "Would you like the lemon scoop in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-07",
+      "repeat": 0,
+      "findings": [
+        "HALLUCINATED_ITEM"
+      ],
+      "judgeScore": 2,
+      "latencyMs": 978,
+      "promptTokens": 2252,
+      "completionTokens": 104,
+      "costUsd": 0.00051832,
+      "judgeCostUsd": 0.005786,
+      "output": {
+        "order": [
+          {
+            "type": "container",
+            "id": "g1",
+            "container": {
+              "name": "Waffle Cone"
+            },
+            "scoops": [
+              {
+                "id": "s1",
+                "name": "Pistachio Scoop"
+              },
+              {
+                "id": "s2",
+                "name": "Pistachio Scoop"
+              }
+            ]
+          }
+        ],
+        "clarification": "Would you like the two pistachio scoops in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-07",
+      "repeat": 1,
+      "findings": [
+        "HALLUCINATED_ITEM"
+      ],
+      "judgeScore": 2,
+      "latencyMs": 1015,
+      "promptTokens": 2252,
+      "completionTokens": 104,
+      "costUsd": 0.00051832,
+      "judgeCostUsd": 0.008046,
+      "output": {
+        "order": [
+          {
+            "type": "container",
+            "id": "g1",
+            "container": {
+              "name": "Waffle Cone"
+            },
+            "scoops": [
+              {
+                "id": "s1",
+                "name": "Pistachio Scoop"
+              },
+              {
+                "id": "s2",
+                "name": "Pistachio Scoop"
+              }
+            ]
+          }
+        ],
+        "clarification": "Would you like the two pistachio scoops in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-08",
+      "repeat": 0,
+      "findings": [
+        "UNRESOLVED_NAME"
+      ],
+      "judgeScore": 3,
+      "latencyMs": 601,
+      "promptTokens": 2249,
+      "completionTokens": 43,
+      "costUsd": 0.00050424,
+      "judgeCostUsd": 0.014552,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Small Coca-Cola"
+            }
+          }
+        ],
+        "clarification": "Would you like the banana split in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-08",
+      "repeat": 1,
+      "findings": [
+        "UNRESOLVED_NAME"
+      ],
+      "judgeScore": 2,
+      "latencyMs": 583,
+      "promptTokens": 2249,
+      "completionTokens": 43,
+      "costUsd": 0.00050424,
+      "judgeCostUsd": 0.017382,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Small Coca-Cola"
+            }
+          }
+        ],
+        "clarification": "Would you like the banana split in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-09",
+      "repeat": 0,
+      "findings": [],
+      "judgeScore": 2,
+      "latencyMs": 559,
+      "promptTokens": 2249,
+      "completionTokens": 32,
+      "costUsd": 0.00050182,
+      "judgeCostUsd": 0.010238,
+      "output": {
+        "order": [],
+        "clarification": "Would you like the small hazelnut milkshake in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-09",
+      "repeat": 1,
+      "findings": [],
+      "judgeScore": 3,
+      "latencyMs": 617,
+      "promptTokens": 2249,
+      "completionTokens": 32,
+      "costUsd": 0.00050182,
+      "judgeCostUsd": 0.013108,
+      "output": {
+        "order": [],
+        "clarification": "Would you like the small hazelnut milkshake in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-10",
+      "repeat": 0,
+      "findings": [
+        "INVALID_OPTION_OR_ADDON",
+        "ROLE_VIOLATION"
+      ],
+      "judgeScore": 1,
+      "latencyMs": 1576,
+      "promptTokens": 2253,
+      "completionTokens": 126,
+      "costUsd": 0.00052338,
+      "judgeCostUsd": 0.014364,
+      "output": {
+        "order": [
+          {
+            "type": "container",
+            "id": "g1",
+            "container": {
+              "name": "Cup"
+            },
+            "scoops": [
+              {
+                "id": "s1",
+                "name": "Lemon Scoop"
+              },
+              {
+                "id": "s2",
+                "name": "Lemon Scoop"
+              }
+            ],
+            "addOns": [
+              "Caramel Sauce"
+            ]
+          },
+          {
+            "type": "standalone",
+            "id": "g2",
+            "item": {
+              "name": "Cup"
+            }
+          }
+        ],
+        "clarification": "Would you like to add any other items to your order?"
+      }
+    },
+    {
+      "caseId": "case-10",
+      "repeat": 1,
+      "findings": [
+        "INVALID_OPTION_OR_ADDON",
+        "ROLE_VIOLATION"
+      ],
+      "judgeScore": 1,
+      "latencyMs": 1129,
+      "promptTokens": 2253,
+      "completionTokens": 126,
+      "costUsd": 0.00052338,
+      "judgeCostUsd": 0.019054,
+      "output": {
+        "order": [
+          {
+            "type": "container",
+            "id": "g1",
+            "container": {
+              "name": "Cup"
+            },
+            "scoops": [
+              {
+                "id": "s1",
+                "name": "Lemon Scoop"
+              },
+              {
+                "id": "s2",
+                "name": "Lemon Scoop"
+              }
+            ],
+            "addOns": [
+              "Caramel Sauce"
+            ]
+          },
+          {
+            "type": "standalone",
+            "id": "g2",
+            "item": {
+              "name": "Cup"
+            }
+          }
+        ],
+        "clarification": "Would you like to add any other items to your order?"
+      }
+    },
+    {
+      "caseId": "case-11",
+      "repeat": 0,
+      "findings": [
+        "HALLUCINATED_ITEM"
+      ],
+      "judgeScore": 1,
+      "latencyMs": 1042,
+      "promptTokens": 2249,
+      "completionTokens": 112,
+      "costUsd": 0.00051942,
+      "judgeCostUsd": 0.006272,
+      "output": {
+        "order": [
+          {
+            "type": "container",
+            "id": "g1",
+            "container": {
+              "name": "Cup"
+            },
+            "scoops": [
+              {
+                "id": "s1",
+                "name": "Vanilla Scoop"
+              }
+            ]
+          },
+          {
+            "type": "standalone",
+            "id": "g2",
+            "item": {
+              "name": "Small Milkshake"
+            },
+            "options": [
+              "Vanilla"
+            ]
+          }
+        ],
+        "clarification": "Would you like the Small Milkshake with Oat Milk or Almond Milk?"
+      }
+    },
+    {
+      "caseId": "case-11",
+      "repeat": 1,
+      "findings": [
+        "HALLUCINATED_ITEM"
+      ],
+      "judgeScore": 1,
+      "latencyMs": 1144,
+      "promptTokens": 2249,
+      "completionTokens": 112,
+      "costUsd": 0.00051942,
+      "judgeCostUsd": 0.007742,
+      "output": {
+        "order": [
+          {
+            "type": "container",
+            "id": "g1",
+            "container": {
+              "name": "Cup"
+            },
+            "scoops": [
+              {
+                "id": "s1",
+                "name": "Vanilla Scoop"
+              }
+            ]
+          },
+          {
+            "type": "standalone",
+            "id": "g2",
+            "item": {
+              "name": "Small Milkshake"
+            },
+            "options": [
+              "Vanilla"
+            ]
+          }
+        ],
+        "clarification": "Would you like the Small Milkshake with Oat Milk or Almond Milk?"
+      }
+    },
+    {
+      "caseId": "case-12",
+      "repeat": 0,
+      "findings": [],
+      "judgeScore": 5,
+      "latencyMs": 769,
+      "promptTokens": 2250,
+      "completionTokens": 44,
+      "costUsd": 0.00050468,
+      "judgeCostUsd": 0.008508,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Fruit Sundae"
+            }
+          }
+        ],
+        "clarification": "Would you like the chocolate scoop in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-12",
+      "repeat": 1,
+      "findings": [],
+      "judgeScore": 5,
+      "latencyMs": 628,
+      "promptTokens": 2250,
+      "completionTokens": 44,
+      "costUsd": 0.00050468,
+      "judgeCostUsd": 0.008548,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Fruit Sundae"
+            }
+          }
+        ],
+        "clarification": "Would you like the chocolate scoop in a waffle cone or in a cup?"
+      }
+    },
+    {
+      "caseId": "case-13",
+      "repeat": 0,
+      "findings": [],
+      "judgeScore": 5,
+      "latencyMs": 651,
+      "promptTokens": 2251,
+      "completionTokens": 27,
+      "costUsd": 0.00050116,
+      "judgeCostUsd": 0.004188,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Stracciatella Sundae"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "caseId": "case-13",
+      "repeat": 1,
+      "findings": [],
+      "judgeScore": 5,
+      "latencyMs": 604,
+      "promptTokens": 2251,
+      "completionTokens": 27,
+      "costUsd": 0.00050116,
+      "judgeCostUsd": 0.004038,
+      "output": {
+        "order": [
+          {
+            "type": "standalone",
+            "id": "g1",
+            "item": {
+              "name": "Stracciatella Sundae"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -77,11 +77,34 @@ evals/
   01-deterministic/      Tier 1 — offline checks (starter with TODOs)
   02-judge/              Tier 2 — judge harness (rubric is the exercise)
   03-redteam/            adversarial probes with verdict functions
+  04-compare/            Tier 4 — one eval set vs many models (post-workshop)
 solutions/               full solutions — no peeking before you're green
+  checks.ts              the Tier 1 checks as a module (Tier 4 imports these)
+  rubric.ts              the calibrated judge rubric (Tier 4 imports this)
 docs/CHEATSHEET.md       the one-page take-away
 .devcontainer/           Codespaces environment (Bun, no key baked in)
 .github/workflows/evals.yml  the CI tiering, itself a teaching artifact
 ```
+
+## Beyond the workshop: Tier 4, model acceptance
+
+`evals/04-compare/` answers the question the 120 minutes deliberately do not:
+**"our customer wants to use model X — does our software still work?"** It
+runs the same golden set against any OpenRouter model, applies the Tier 1
+checks to the live output as a hard gate, scores the residual with the
+calibrated judge, and stores a versioned artifact per run so the results can
+be compared without lying to you.
+
+```bash
+bun run eval:model -- --model anthropic/claude-haiku-4.5
+bun run eval:model -- --model meta-llama/llama-3.1-8b-instruct
+bun run eval:compare
+```
+
+Recorded runs for three models ship in `evals/04-compare/results/`, so the
+comparison works before you spend a cent. Read
+`evals/04-compare/README.md` — including why one of those three models cannot
+run this eval set at all, for reasons that have nothing to do with quality.
 
 ## Design notes for trainers
 

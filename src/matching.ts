@@ -84,14 +84,56 @@ export async function matchOrder(
 	openClarification?: string,
 	model = 'anthropic/claude-haiku-4.5'
 ): Promise<MatchedOrder> {
+	const { raw } = await matchOrderWithMeta({ transcript, currentOrder, openClarification, model });
+	const parsed = matchedOrderSchema.safeParse(raw);
+	if (!parsed.success) throw new Error(`Model output failed schema parse: ${parsed.error.message}`);
+	return parsed.data;
+}
+
+/** What one call to a candidate model cost us, besides the order itself. */
+export interface CallMeta {
+	model: string;
+	latencyMs: number;
+	promptTokens: number;
+	completionTokens: number;
+	/** Charged amount in OpenRouter credits (USD). Always present since 2025. */
+	costUsd: number;
+}
+
+/**
+ * The same call as `matchOrder`, but returning what Tier 4 needs to compare
+ * models: tokens, cost and latency alongside the order.
+ *
+ * `matchOrder` above is the thin wrapper the exercises use — its signature
+ * stays deliberately boring so Hands-on 2 and the red-team demo read as
+ * "transcript in, order out" with no measurement apparatus in the way.
+ */
+export async function matchOrderWithMeta(opts: {
+	transcript: string;
+	currentOrder?: OrderGroup[];
+	openClarification?: string;
+	model?: string;
+	/** Pin for reproducibility. Omitted entirely when undefined, so the
+	 *  exercises keep whatever the provider defaults to. */
+	temperature?: number;
+}): Promise<{ raw: unknown; meta: CallMeta }> {
+	const {
+		transcript,
+		currentOrder = [],
+		openClarification,
+		model = 'anthropic/claude-haiku-4.5',
+		temperature
+	} = opts;
 	const apiKey = process.env.OPENROUTER_API_KEY;
 	if (!apiKey) throw new Error('OPENROUTER_API_KEY is not set (see .env.example)');
 
+	const startedAt = performance.now();
 	const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
 		method: 'POST',
 		headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify({
 			model,
+			...(temperature === undefined ? {} : { temperature }),
 			messages: [
 				{ role: 'user', content: matchingPrompt(menu, transcript, currentOrder, openClarification) }
 			],
@@ -149,8 +191,33 @@ export async function matchOrder(
 	});
 
 	if (!res.ok) throw new Error(`OpenRouter ${res.status}: ${await res.text()}`);
-	const data = (await res.json()) as { choices: { message: { content: string } }[] };
-	const parsed = matchedOrderSchema.safeParse(JSON.parse(data.choices[0].message.content));
-	if (!parsed.success) throw new Error(`Model output failed schema parse: ${parsed.error.message}`);
-	return parsed.data;
+	const data = (await res.json()) as {
+		choices: { message: { content: string } }[];
+		usage?: { prompt_tokens?: number; completion_tokens?: number; cost?: number };
+	};
+	const latencyMs = performance.now() - startedAt;
+	const content = data.choices[0].message.content;
+
+	// Deliberately NOT zod-parsed here. A candidate model that returns
+	// malformed JSON is a finding Tier 4 must record (SCHEMA_INVALID), not an
+	// exception that aborts the run — so the raw payload goes back untouched
+	// and the caller decides. `matchOrder` above still throws, because the
+	// exercises want a trustworthy MatchedOrder or nothing.
+	let raw: unknown;
+	try {
+		raw = JSON.parse(content);
+	} catch {
+		raw = content; // not even JSON — fails schema validation downstream
+	}
+
+	return {
+		raw,
+		meta: {
+			model,
+			latencyMs,
+			promptTokens: data.usage?.prompt_tokens ?? 0,
+			completionTokens: data.usage?.completion_tokens ?? 0,
+			costUsd: data.usage?.cost ?? 0
+		}
+	};
 }

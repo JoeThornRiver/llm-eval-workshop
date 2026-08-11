@@ -8,8 +8,9 @@
 | Output is *semantically close* to a reference | Embedding similarity + threshold | every commit | ~free | (not needed today — our outputs are structured) |
 | Quality that needs judgment (helpfulness, tone, reasonableness) | LLM-as-judge with rubric | PRs / nightly | cents per run | clarification quality |
 | Robustness against adversarial input | Red-team probes with verdict functions | nightly / pre-release | cents per run | transcript injection |
+| Whether a DIFFERENT model can run your software | Same eval set, many models + versioned artifacts | on request / per candidate | cents per model | `evals/04-compare/` |
 
-## The six rules that keep eval suites alive
+## The seven rules that keep eval suites alive
 
 1. **Tier by cost.** Free checks on every commit; paid checks on PRs;
    adversarial suites on a schedule. A suite nobody can afford to run is a
@@ -25,7 +26,12 @@
    against human labels** before any CI gate trusts them. Re-calibrate on
    every judge-model change.
 6. **Log model + prompt + eval-set versions with every score.** A score
-   without its versions is a number without meaning.
+   without its versions is a number without meaning. Corollary: a comparison
+   tool should *refuse* runs that disagree on those versions, not print a
+   plausible table anyway (`evals/04-compare/compare.ts` does).
+7. **Never rank models on one sample.** Repeat each case, report the spread,
+   and treat a gap smaller than the spread as a tie. Hold the judge and rubric
+   fixed across candidates, and watch for a judge favouring its own family.
 
 ## Tooling pointers
 

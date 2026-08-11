@@ -1,5 +1,9 @@
 # Solution — a calibrated judge rubric for the matching feature
 
+The canonical copy of this text is exported as `CALIBRATED_RUBRIC` from
+`solutions/rubric.ts`, because Tier 4 (`evals/04-compare/`) imports it to
+score candidate models. Edit it there; this file is the explanation.
+
 Replace the placeholder `RUBRIC` in `evals/02-judge/run-judge.ts` with:
 
 ```
