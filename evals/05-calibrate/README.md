@@ -30,11 +30,75 @@ the model output is held constant and the judge is the only variable. Exit code
 | **severe recall** | of the cases the human failed, how many did the judge also fail? | the dangerous one: averages hide a missed disaster |
 | **self-agreement** | does the judge agree with *itself* across repeats? | caps how well it can ever agree with a human; no wording fixes it |
 
-Quadratic weights on κ are deliberate: plain κ treats "human 5, judge 1" as no
-worse than "human 5, judge 4", which is nonsense for a score. The formulas live
-in `stats.ts` with unit tests in `stats.test.ts` whose expected values are
-derived by hand — a miscomputed κ would certify a judge that does not work,
-which is worse than having no κ at all.
+### The same five, in plain language
+
+Two scorers looked at the same 13 outputs: a human, and the judge. Every number
+below is a different way of asking *how close were they*, and each one fails for
+a different reason — which is why one summary figure will not do.
+
+**Exact agreement** — how often the judge landed on the human's number, to the
+point. Easy to read and easy to be fooled by: on a 1–5 scale, a scorer with no
+judgment at all still hits sometimes by luck.
+
+**Weighted κ ("kappa")** — *agreement after subtracting the luck, with big
+misses punished harder than small ones.* Two ideas in one number:
+
+- *Chance-corrected.* A judge that shouts "5" at everything will agree with a
+  human on every case the human also scored 5 — pure luck, no skill. κ measures
+  how much better than that guessing baseline you did. **1.0 is perfect
+  agreement, 0.0 is no better than chance, and negative is worse than chance.**
+- *Quadratically weighted.* Being off by 4 points (human 5, judge 1) counts
+  **16×** worse than being off by 1 (human 5, judge 4), because the penalty goes
+  with the square of the gap. Unweighted κ would treat those two mistakes as
+  equally bad, which is nonsense for a score.
+
+There is a widely used rule of thumb for reading κ — 0.41–0.60 "moderate",
+0.61–0.80 "substantial" — and it is a convention, not a law. Our gate sits at
+**0.60**, right on that boundary, which is a deliberately unambitious bar: it
+says *this judge is at least tracking the human*, not *this judge is good*.
+
+**Spearman ρ** — *does the judge put the outputs in the same order as the
+human?* Ranks only, absolute values ignored, from −1 (perfectly reversed)
+through 0 (no relationship) to +1 (identical ordering). This is the
+forgiving cousin of κ: a judge that is reliably one point too generous on
+everything still ranks correctly, so ρ stays high while κ drops. That gap
+between the two is itself informative — it means *miscalibrated but useful*.
+
+**Offset** — the average of (judge − human). Positive means the judge is kinder.
+This is the *cheap* failure: a judge that is consistently one point generous can
+be fixed by sharpening the anchors, or simply by moving the CI threshold to
+match. Nothing about the rubric's logic is wrong.
+
+**Severe recall** — of the outputs the *human* marked as failures, what fraction
+did the judge also mark as failures? Here "failure" means a score of **2 or
+less**, on both sides. Six of our 13 cases qualify. This gets its own number
+because an average hides a catastrophe: a judge can look respectable overall and
+still wave through the one output that would embarrass you in front of a
+customer. It is recall in the ordinary sense — of the real problems, how many
+did you catch — restricted to the cases that actually matter.
+
+**Inversions** — *pairs the two scorers ranked in opposite directions.* If the
+human says A is better than B and the judge says B is better than A, that pair
+is inverted. We count an inversion as **severe** when the human's gap was 2
+points or more, i.e. not remotely a close call.
+
+This is the most diagnostic number in the run, and the reason is worth
+internalising: an offset means the judge is *miscalibrated*, which a threshold
+can absorb. An inversion means the judge is using **different criteria** than
+the human — something the human cares about is missing from your rubric — and no
+threshold, temperature or judge upgrade will fix a wrong ordering. You have to
+go and write the missing criterion. That is exactly what happened between v1
+and v2 below.
+
+**Self-agreement** — same judge, same rubric, same input, three times: how often
+does it produce the identical score? This caps everything else. A judge that
+cannot agree with itself cannot agree with you, and no rewording rescues it —
+pin the temperature, then consider a stronger judge model.
+
+The formulas live in `stats.ts`, with unit tests in `stats.test.ts` whose
+expected values are derived by hand rather than captured from a run — a
+miscomputed κ would certify a judge that does not work, which is worse than
+having no κ at all.
 
 ## The labels are SYNTHETIC — read this before quoting any number
 
