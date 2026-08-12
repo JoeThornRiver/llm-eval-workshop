@@ -59,14 +59,24 @@ loads `.env` automatically; `.gitignore` keeps it out of git.
 
 ## Workshop flow (120 min)
 
-| Time | Block | Where |
-|---|---|---|
-| 0:00 | Impulse: why your assertions fail on LLMs | slides / live demo |
-| 0:20 | **Hands-on 1: deterministic checks** (offline) | `evals/01-deterministic/EXERCISE.md` |
-| 0:50 | **Hands-on 2: LLM-as-judge** (live) | `evals/02-judge/EXERCISE.md` |
-| 1:20 | Red-team demo: transcript injection | `evals/03-redteam/DEMO.md` |
-| 1:40 | CI wiring: tiers, triggers, thresholds | `.github/workflows/evals.yml` |
-| 1:55 | Wrap-up | `docs/CHEATSHEET.md` |
+The session answers **one** question — *"can we run your software on this new
+model?"* — and every block before 1:35 exists to earn the right to answer it.
+Six layers go in; one defensible verdict comes out.
+
+| Time | Block | Contributes to the verdict | Where |
+|---|---|---|---|
+| 0:00 | The question that costs you a day | why a human reads outputs today | live demo |
+| 0:15 | **Hands-on 1: the gate you write once** (offline) | the free, model-independent half | `evals/01-deterministic/EXERCISE.md` |
+| 0:45 | **Hands-on 2: the judge for the residual** (live) | the half that needs taste | `evals/02-judge/EXERCISE.md` |
+| 1:10 | Trust the judge, or don't ship it | proof the judge's number means anything | `evals/05-calibrate/README.md` |
+| 1:25 | A new model is a new attack surface | injection resistance, per candidate | `evals/03-redteam/DEMO.md` |
+| 1:35 | **The verdict: one eval set, many models** | the answer, in 24 seconds, in writing | `evals/04-compare/README.md` |
+| 1:55 | Wrap-up | what they change on Monday | `docs/CHEATSHEET.md` |
+
+CI wiring (`.github/workflows/evals.yml`) folds into the 1:35 block as "how
+this runs unattended". An earlier revision of this workshop ended at the CI
+block and treated Tiers 4–5 as optional extras; the arc above is stronger,
+because model acceptance is the problem the audience actually owns.
 
 ## Repository map
 
@@ -94,14 +104,14 @@ docs/CHEATSHEET.md       the one-page take-away
 .github/workflows/evals.yml  the CI tiering, itself a teaching artifact
 ```
 
-## Beyond the workshop: Tier 4, model acceptance
+## The destination: model acceptance
 
-`evals/04-compare/` answers the question the 120 minutes deliberately do not:
-**"our customer wants to use model X — does our software still work?"** It
-runs the same golden set against any OpenRouter model, applies the Tier 1
-checks to the live output as a hard gate, scores the residual with the
-calibrated judge, and stores a versioned artifact per run so the results can
-be compared without lying to you.
+`evals/04-compare/` is where the 120 minutes land: **"our customer wants to
+use model X — does our software still work?"** It runs the same golden set
+against any OpenRouter model, applies the Tier 1 checks to the live output as
+a hard gate, scores the residual with the calibrated judge, and stores a
+versioned artifact per run so the results can be compared without lying to
+you.
 
 ```bash
 bun run eval:model -- --model anthropic/claude-haiku-4.5
@@ -131,6 +141,19 @@ fails its gate, and the rubric that failure produced — differing from the
 previous one by a single added criterion. Roughly four minutes, under a euro.
 `evals/05-calibrate/README.md` has the numbers and the one disagreement that
 survives every version.
+
+A candidate also has to survive the adversarial probes, because injection
+resistance belongs to the model and cannot be inherited from the incumbent:
+
+```bash
+bun run eval:redteam                                              # the incumbent
+bun run eval:redteam -- --model mistralai/mistral-small-24b-instruct-2501
+```
+
+That second model clears the deterministic gate on 100% of calls and scores a
+respectable 3.00 with the judge — and loses **all three** probes, returning the
+entire system prompt (menu, rules, few-shot examples) to the customer in the
+`clarification` field. Quality screening alone would have accepted it.
 
 ## Design notes for trainers
 
