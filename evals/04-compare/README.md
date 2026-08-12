@@ -47,10 +47,32 @@ instead of a plausible table. Most homegrown harnesses print the table anyway.
 | `gate pass` | share of calls with zero deterministic findings — the hard gate |
 | `judge mean ±sd` | graded quality, with the spread that decides if a gap is real |
 | defect matrix | *which* failures, per model. What a reviewer actually signs off |
-| `p95` | tail latency, not the average that hides it |
+| `p95` | tail latency, not the average that hides it — see below |
 | `$/1k orders` | candidate inference only — the judge is eval overhead, never unit cost |
 | `unstable` | cases whose findings changed between repeats on identical input |
 | `err` | calls that failed outright |
+
+### P95, in plain words
+
+**Response time, 95th percentile.** Line every call up from fastest to slowest
+and read off the point where 95% of them are quicker — so it is *the slowest
+response a customer sees in roughly one call out of twenty*.
+
+The average is the number that hides the problem. From the runs in `results/`:
+
+| Model | Mean | P95 | Slowest |
+|---|---|---|---|
+| `anthropic/claude-haiku-4.5` | 1994 ms | **5191 ms** | 6626 ms |
+| `meta-llama/llama-3.1-8b-instruct` | 967 ms | **1736 ms** | 2043 ms |
+
+Haiku's tail is two and a half times its own average, and three times Llama's —
+on the model that is *better* at the actual job. One order in twenty waiting
+over five seconds, at a counter with a queue behind it, is a product decision
+that a mean of "about two seconds" would have hidden completely.
+
+One caveat to state rather than bury: at 26 calls per model, the 95th
+percentile *is* the second-slowest call. Treat it as a smoke signal, not a
+measurement — quoting a tail to a customer wants hundreds of calls.
 
 ## Four things this harness refuses to let you get wrong
 
@@ -101,11 +123,20 @@ is ever a quality question. Two ways out, and it is a real decision:
 Deciding that is exactly the kind of question an eval suite is supposed to
 surface early, and a manual review process surfaces late.
 
-## Known gap
+## Is the judge behind these scores trustworthy?
 
-**The judge is not calibrated against human labels here.** The rubric is a
-good one, but "good rubric" is a belief until you measure judge-vs-human
-agreement (Cohen's κ or Spearman ρ, plus recall on known-bad cases, since
-judges skew lenient). Until that exists, treat the `judge mean` column as
-indicative and the `gate pass` and defect columns as load-bearing — those are
-deterministic and need no trust.
+That question has its own tier now: **`evals/05-calibrate/`** measures the
+judge against human labels — chance-corrected agreement, ordering,
+opposite-ranked pairs, and recall on the cases a human failed. Run it before
+you quote a `judge mean` at anyone.
+
+What it currently says: the rubric this harness imports (`calibrated-v1`) is
+better than a placeholder on every metric and **still fails** its own gate, on
+failure catch-rate; the one-sentence-longer `calibrated-v2` passes. Two caveats
+carry over — those labels are synthetic, and this harness still imports v1, so
+the `judge mean` column here rests on a rubric that did not clear calibration.
+
+Which is a long way of saying what the two layers already imply: the
+`gate pass` and defect columns are load-bearing because they are deterministic
+and need no trust, and the `judge mean` column is indicative until you have
+calibrated the judge on labels of your own.

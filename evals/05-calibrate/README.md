@@ -49,7 +49,7 @@ for the rank correlation, Jacob Cohen (1960) for kappa. "Spearman ρ" and
 point. Easy to read and easy to be fooled by: on a 1–5 scale, a scorer with no
 judgment at all still hits sometimes by luck.
 
-**Weighted κ ("kappa")** — *agreement after subtracting the luck, with big
+**Chance-corrected agreement** — *weighted κ, "kappa"* — *agreement after subtracting the luck, with big
 misses punished harder than small ones.* Two ideas in one number:
 
 - *Chance-corrected.* A judge that shouts "5" at everything will agree with a
@@ -66,19 +66,19 @@ There is a widely used rule of thumb for reading κ — 0.41–0.60 "moderate",
 **0.60**, right on that boundary, which is a deliberately unambitious bar: it
 says *this judge is at least tracking the human*, not *this judge is good*.
 
-**Spearman ρ** — *does the judge put the outputs in the same order as the
-human?* Ranks only, absolute values ignored, from −1 (perfectly reversed)
+**Rank correlation** — *Spearman ρ, "rho"* — *does the judge put the outputs in the
+same order as the human?* Ranks only, absolute values ignored, from −1 (perfectly reversed)
 through 0 (no relationship) to +1 (identical ordering). This is the
 forgiving cousin of κ: a judge that is reliably one point too generous on
 everything still ranks correctly, so ρ stays high while κ drops. That gap
 between the two is itself informative — it means *miscalibrated but useful*.
 
-**Offset** — the average of (judge − human). Positive means the judge is kinder.
+**Average bias** — *offset* — the average of (judge − human). Positive means the judge is kinder.
 This is the *cheap* failure: a judge that is consistently one point generous can
 be fixed by sharpening the anchors, or simply by moving the CI threshold to
 match. Nothing about the rubric's logic is wrong.
 
-**Severe recall** — of the outputs the *human* marked as failures, what fraction
+**Failure catch-rate** — *severe recall* — of the outputs the *human* marked as failures, what fraction
 did the judge also mark as failures? Here "failure" means a score of **2 or
 less**, on both sides. Six of our 13 cases qualify. This gets its own number
 because an average hides a catastrophe: a judge can look respectable overall and
@@ -86,7 +86,7 @@ still wave through the one output that would embarrass you in front of a
 customer. It is recall in the ordinary sense — of the real problems, how many
 did you catch — restricted to the cases that actually matter.
 
-**Inversions** — *pairs the two scorers ranked in opposite directions.* If the
+**Opposite-ranked pairs** — *inversions* — *pairs the two scorers ranked in opposite directions.* If the
 human says A is better than B and the judge says B is better than A, that pair
 is inverted. We count an inversion as **severe** when the human's gap was 2
 points or more, i.e. not remotely a close call.
@@ -99,7 +99,7 @@ threshold, temperature or judge upgrade will fix a wrong ordering. You have to
 go and write the missing criterion. That is exactly what happened between v1
 and v2 below.
 
-**Self-agreement** — same judge, same rubric, same input, three times: how often
+**Repeatability** — *self-agreement* — same judge, same rubric, same input, three times: how often
 does it produce the identical score? This caps everything else. A judge that
 cannot agree with itself cannot agree with you, and no rewording rescues it —
 pin the temperature, then consider a stronger judge model.
