@@ -255,8 +255,6 @@ solutions/               full solutions — no peeking before you're green
   rubric.ts              the calibrated judge rubric (Tier 4 imports this)
 docs/CHEATSHEET.md       the one-page take-away
 docs/instructor-call-sheet.html   the trainer's runbook — open it in a browser
-docs/DECK-HANDOVER.md    brief for updating the impulse deck
-docs/DECK-HANDOVER-MCP.md  brief for the MCP appendix slides
 .devcontainer/           Codespaces environment (Bun, no key baked in)
 .github/workflows/evals.yml  the CI tiering, itself a teaching artifact
 ```
