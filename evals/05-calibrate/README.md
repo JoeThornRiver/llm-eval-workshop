@@ -36,6 +36,15 @@ Two scorers looked at the same 13 outputs: a human, and the judge. Every number
 below is a different way of asking *how close were they*, and each one fails for
 a different reason — which is why one summary figure will not do.
 
+First, the Greek letters, because they are pure convention and not abbreviations
+of anything. **κ** is the letter *kappa*; **ρ** is the letter *rho*, pronounced
+to rhyme with "go". They are simply the customary symbols for these two
+statistics, named after the people who proposed them — Charles Spearman (1904)
+for the rank correlation, Jacob Cohen (1960) for kappa. "Spearman ρ" and
+"Spearman's rank correlation" mean the same thing; so do "weighted κ" and
+"Cohen's weighted kappa". If you prefer plain words, say *rank correlation* and
+*chance-corrected agreement*.
+
 **Exact agreement** — how often the judge landed on the human's number, to the
 point. Easy to read and easy to be fooled by: on a 1–5 scale, a scorer with no
 judgment at all still hits sometimes by luck.
