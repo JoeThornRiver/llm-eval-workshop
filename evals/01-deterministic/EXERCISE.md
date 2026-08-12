@@ -11,8 +11,13 @@ Tier-1 safety net that runs on every commit, offline, in milliseconds.
 
 ```bash
 bun install
-bun test          # 4 pass, 9 fail — that is your starting position
+bun test evals/01-deterministic   # 4 pass, 9 fail — your starting position
 ```
+
+Pass that path every time you re-run. A bare `bun test` collects every test
+file in the repo, including the finished solutions, and reports 37 pass / 9
+fail — the 9 failures are still yours, but the number is useless as a progress
+signal.
 
 ## Your task
 

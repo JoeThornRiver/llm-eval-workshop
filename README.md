@@ -17,8 +17,15 @@ pre-installed. Locally: install [Bun](https://bun.sh), then:
 
 ```bash
 bun install
-bun test        # your Hands-on 1 starting position: 4 pass, 9 fail
+bun test evals/01-deterministic   # 4 pass, 9 fail — your Hands-on 1 start
+bun test solutions               # 13 pass — the reference implementation
 ```
+
+Pass the path explicitly. A bare `bun test` is Bun's own runner and ignores the
+`package.json` script, so it collects *every* test file in the repo — the
+starter, the solutions and the calibration stats — and reports 37 pass / 9
+fail, which tells you nothing about where you are. (`bun run test` also works:
+it runs the scoped script.)
 
 Hands-on 1 is fully offline: no API key, no cost. Hands-on 2 and the
 red-team demo call the live model via OpenRouter — see the next section.
@@ -140,5 +147,6 @@ survives every version.
 - An attendee can print the shared key inside their own Codespace. That is
   unavoidable — their code has to call the API with it — so treat the credit
   limit, not secrecy, as the control, and revoke the key afterwards.
-- `bun test` (Hands-on 1) is red by design, so CI runs `bun test solutions`
-  for the repo's own health. See the comment in `.github/workflows/evals.yml`.
+- `bun test evals/01-deterministic` (Hands-on 1) is red by design, so CI runs
+  `bun test solutions` for the repo's own health. See the comment in
+  `.github/workflows/evals.yml`.
