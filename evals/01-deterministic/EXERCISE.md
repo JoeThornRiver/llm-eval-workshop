@@ -7,6 +7,11 @@ transcript into a structured order, constrained by a Zod schema. The schema
 guarantees the SHAPE of the output — and nothing else. Your job: build the
 Tier-1 safety net that runs on every commit, offline, in milliseconds.
 
+New to the case? Read **The scenario** in the root `README.md` first — two
+minutes, and it covers the four domain rules (scoops need containers,
+standalone items never go in one, options vs add-ons, and never guess a
+container) that the 13 golden cases are built to test.
+
 ## Setup check (should already be done by the devcontainer)
 
 ```bash

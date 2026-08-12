@@ -10,6 +10,57 @@ The code is extracted and simplified from a production app (SvelteKit +
 Bun); prompts, schema quirks and validation semantics are the real thing,
 translated to an English-only case.
 
+## The scenario — read this first
+
+**The product.** An ice cream cafe with a queue at the counter. Instead of a
+cashier tapping buttons, the customer just says what they want: *"two scoops
+of chocolate in a waffle cone with cream, please."* Speech-to-text turns that
+into a transcript; the transcript and the menu go to an LLM; the LLM returns a
+**structured order** that the rest of the software consumes — to price it, show
+it on a confirmation screen, and send it to the counter. Nobody types. The
+model is the only thing standing between spoken language and a priced order.
+
+**Why this makes a good eval case.** The same order can be said fifty ways, so
+the input is open-ended and the output is non-deterministic — and yet there is
+a genuinely *right* answer every time, which the customer will notice if you
+get it wrong. That combination is what makes assertions useless and evals
+necessary.
+
+**The four things you need to know about the domain.** They come straight from
+how an ice cream counter actually works:
+
+| Concept | Menu examples | Rule |
+|---|---|---|
+| **Scoops** | Vanilla, Chocolate, Pistachio Scoop | Cannot be sold on their own. Must sit inside a container. |
+| **Containers** | Waffle Cone, Cup | Free, hold one or more scoops, can carry add-ons. |
+| **Standalone items** | Spaghetti Ice Cream, Stracciatella Sundae, Large Milkshake, Cappuccino, Coca-Cola | Sold on their own. Never go inside a container. |
+| **Options vs add-ons** | Flavor: Vanilla…; Milk: Oat… / Cream, Strawberry Sauce | An option is single-select per dimension, only if the customer named it. An add-on is a zero-or-more stackable extra, and only from that item's own list. |
+
+**The one rule that produces most of the interesting failures.** If the
+customer names scoops but no container, the model must **not** pick one. It
+keeps everything else in the order, leaves the container-less scoops out, and
+sets `clarification` to ask *cone or cup?* Guessing is the failure you will see
+most often today, and it is a real one — the customer gets charged for a cone
+they never chose.
+
+**What the model returns.** JSON with an `order` array of groups — each group is
+either a container group (a container plus its scoops) or a standalone group
+(one item) — plus an optional `clarification` string. No prices: the model
+returns identity only, and the menu supplies the price. See `src/schema.ts`.
+
+**Four worked examples** — the fastest way to internalise all of the above:
+
+| Transcript | Correct behaviour |
+|---|---|
+| "Two scoops of chocolate in a waffle cone." | One container group: Waffle Cone holding 2 × Chocolate Scoop. |
+| "A chocolate scoop and a fruit sundae." | Fruit Sundae goes in the order. The scoop does **not** — no container was named — and `clarification` asks cone or cup. |
+| "A stracciatella sundae, please." | One standalone Stracciatella Sundae. *Not* a stracciatella scoop in a cup: "Sundae" here is part of a menu item's name, not a container. |
+| "I'd like a banana split." | Empty order plus a `clarification` saying it is unavailable and offering the closest thing. There is deliberately no banana split on the menu. |
+
+Everything in the workshop — the 13 golden cases, the judge rubric, the
+adversarial probes — is about whether a model gets those four behaviours right,
+and about noticing when it does not.
+
 ## Quick start
 
 Open in **GitHub Codespaces** (or any devcontainer host) — everything is
