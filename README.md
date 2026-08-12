@@ -61,6 +61,81 @@ Everything in the workshop — the 13 golden cases, the judge rubric, the
 adversarial probes — is about whether a model gets those four behaviours right,
 and about noticing when it does not.
 
+## The 13 golden cases — the data everything runs on
+
+Every tier in this repo reads the same 13 files in `fixtures/cases/`. Read one
+before you start; the rest then explain themselves.
+
+### Anatomy of a case
+
+```jsonc
+{
+  "id": "case-11",
+  "title": "Hallucinated scoop",
+  "transcript": "One scoop of vanilla in a cup.",   // what the customer said
+  "recorded": {                                      // what a model ACTUALLY returned
+    "order": [{ "type": "container", "id": "g1",
+                "container": { "name": "Cup" },
+                "scoops": [{ "id": "s1", "name": "Vanilla Scoop" },
+                           { "id": "s2", "name": "Strawberry Scoop" }] }]
+  },
+  "expected": {                                      // ground truth, written by a human
+    "allowedItems": ["Cup", "Vanilla Scoop"],
+    "expectClarification": false
+  },
+  "expectedFindings": ["HALLUCINATED_ITEM"],         // what a correct suite must raise
+  "note": "Schema-valid, names resolve, structure is fine - and the customer
+           never ordered strawberry. Golden labels are the only net that
+           catches this."
+}
+```
+
+Nobody ordered a strawberry scoop. The output is perfectly well-formed, every
+name is a real menu item, the roles are right — and it is wrong. That is the
+case for evals in a single file.
+
+**Three fields that are easy to confuse, and the difference matters:**
+
+- **`recorded`** is *one model's output*, captured once. It is a specimen, not
+  a target. This is the only model-specific thing in the file.
+- **`expected`** is *human ground truth about the transcript* — which menu
+  items may legitimately appear, and whether a question is owed. It is true for
+  **any** model, which is why Tier 4 can reuse it to grade candidates.
+- **`expectedFindings`** is *what a correct check suite must report about that
+  particular recording*. For a live model run the expectation is different and
+  simpler: **zero findings**.
+
+### All 13, and what each one is for
+
+Ten cases carry a planted defect; three are clean, because a suite that cries
+wolf on healthy output is as broken as one that misses a bug.
+
+| Case | Transcript | What the recording does | Must raise |
+|---|---|---|---|
+| 01 | "Two scoops of chocolate and one strawberry in a waffle cone" | correct | — |
+| 02 | "A cappuccino, please." | group is missing its `type` field | `SCHEMA_INVALID` |
+| 03 | "A small vanilla milkshake." | standalone group also carries a container | `TYPE_FIELD_MISMATCH`, `HALLUCINATED_ITEM` |
+| 04 | "A scoop of vanilla in a waffle cone — no wait, cancel that, just an espresso." | cancels the scoop, keeps the now-empty cone | `EMPTY_CONTAINER_GROUP` |
+| 05 | "A scoop of choc in a cup." | emits `"Choco Scoop"`, which is not a menu name | `UNRESOLVED_NAME` |
+| 06 | "A spaghetti ice cream, please." | puts a standalone item inside a Cup | `ROLE_VIOLATION` |
+| 07 | "Two scoops of pistachio, please." | invents a Cup instead of asking | `HALLUCINATED_ITEM`, `MISSING_CLARIFICATION` |
+| 08 | "A banana split and a small coke." | drops the off-menu item silently | `MISSING_CLARIFICATION` |
+| 09 | "A small hazelnut milkshake." | asks the right question **and** sets an invalid option | `INVALID_OPTION_OR_ADDON` |
+| 10 | "Two lemon scoops in a cup with caramel sauce." | accepts an add-on the Cup does not offer, says nothing | `INVALID_OPTION_OR_ADDON`, `MISSING_CLARIFICATION` |
+| 11 | "One scoop of vanilla in a cup." | adds a strawberry scoop nobody ordered | `HALLUCINATED_ITEM` |
+| 12 | "A chocolate scoop and a fruit sundae." | correct: keeps the sundae, holds the scoop, asks | — |
+| 13 | "A stracciatella sundae, please." | correct: one menu item, not a scoop in a cup | — |
+
+Note the shape of that list. Cases 02–06 are catchable by structure and
+reference data alone. Cases 07, 08 and 11 are **not** — no amount of schema
+checking knows what the customer said, which is what the golden labels are for.
+Case 09 is deliberately half-right, and case 04's defect is one your runtime
+validator would silently repair.
+
+Each file's `note` explains why the case exists; read it when a check surprises
+you. And do not "fix" the fixtures — they are recordings of real failure modes,
+hand-labelled, and they are the measuring instrument.
+
 ## Quick start
 
 Open in **GitHub Codespaces** — the repo is public, so
