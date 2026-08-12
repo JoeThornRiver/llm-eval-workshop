@@ -113,6 +113,19 @@ async function mapWithConcurrency<T, R>(
 	return results;
 }
 
+/**
+ * Provider error bodies get stored in the artifact, and artifacts get
+ * committed — so strip the account identifiers OpenRouter echoes back before
+ * they end up in a public repository. Not a credential, but not ours to
+ * publish either. Also capped: a 400 from a provider can run to kilobytes of
+ * nested JSON, repeated once per failed call.
+ */
+function sanitizeError(message: string): string {
+	return message
+		.replace(/"(user_id|creator_user_id)"\s*:\s*"[^"]*"/g, '"$1":"[redacted]"')
+		.slice(0, 600);
+}
+
 const units = cases.flatMap((c) => Array.from({ length: repeats }, (_, r) => ({ c, repeat: r })));
 
 console.log(
@@ -164,11 +177,11 @@ const results = await mapWithConcurrency(units, concurrency, async ({ c, repeat 
 				result.judgeCostUsd = verdict.costUsd;
 			} catch (e) {
 				// A judge failure must not erase a valid deterministic result.
-				result.error = `judge: ${(e as Error).message}`;
+				result.error = sanitizeError(`judge: ${(e as Error).message}`);
 			}
 		}
 	} catch (e) {
-		result.error = (e as Error).message;
+		result.error = sanitizeError((e as Error).message);
 	}
 
 	done++;
@@ -222,7 +235,7 @@ const summary: RunSummary = {
 	calls: results.length,
 	errors: errors.length,
 	compatible: ok.length > 0,
-	...(errors.length ? { firstError: errors[0]!.error!.slice(0, 400) } : {}),
+	...(errors.length ? { firstError: errors[0]!.error! } : {}),
 	gatePassRate: ok.length ? ok.filter((r) => r.findings.length === 0).length / ok.length : null,
 	defectCounts,
 	judgeMean,

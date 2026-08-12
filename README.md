@@ -63,8 +63,11 @@ and about noticing when it does not.
 
 ## Quick start
 
-Open in **GitHub Codespaces** (or any devcontainer host) — everything is
-pre-installed. Locally: install [Bun](https://bun.sh), then:
+Open in **GitHub Codespaces** — the repo is public, so
+[codespaces.new/JoeThornRiver/llm-eval-workshop](https://codespaces.new/JoeThornRiver/llm-eval-workshop)
+works for anyone with a GitHub account, and everything is pre-installed
+(Codespaces compute comes out of your own monthly free quota, not the repo
+owner's). Locally: install [Bun](https://bun.sh), then:
 
 ```bash
 bun install
@@ -83,17 +86,33 @@ red-team demo call the live model via OpenRouter — see the next section.
 
 ## The API key
 
-**Attendees do nothing.** The key is a Codespaces *repository secret*,
-injected as `OPENROUTER_API_KEY` into every Codespace created on this repo.
-It is deliberately **not committed**: a key in the repo is a key in the git
-history forever, and OpenRouter is a GitHub secret-scanning partner — the
-day this repo turns public, the key gets revoked out from under you, having
-already been exposed.
+Hands-on 1 needs no key at all. For the live tiers, everyone needs one — and
+because **this repository is public**, the key cannot travel with it.
 
-Trainer setup, once per workshop:
+The key is deliberately **not committed**, and on a public repo that is not a
+style preference: a committed key is public the instant it is pushed, is in the
+git history forever, and OpenRouter is a GitHub secret-scanning partner, so it
+gets detected and revoked out from under you — after it has been exposed.
+
+**In a workshop**, the trainer shares the key in the room (chat message,
+slide) and each attendee does:
+
+```bash
+cp .env.example .env     # then paste the key into it
+```
+
+Bun loads `.env` automatically and `.gitignore` already covers it, so it
+cannot be committed by accident. This works identically in a Codespace and on
+a local machine.
+
+A Codespaces *repository secret* is the smoother route, but only for people
+with repository access — GitHub does not hand repository secrets to arbitrary
+users of a public repo, which is exactly what you want. Worth setting for
+yourself and for CI:
 
 ```bash
 gh secret set OPENROUTER_API_KEY --app codespaces --repo <owner>/llm-eval-workshop
+gh secret set OPENROUTER_API_KEY --repo <owner>/llm-eval-workshop   # Actions
 ```
 
 No key mechanism can restrict *where* a key is used — OpenRouter
@@ -105,8 +124,10 @@ models, IPs or origins. What bounds the risk is the spend cap, so:
   `POST /api/v1/keys`) — a 20-person session runs on a couple of dollars
 - delete the key when the workshop ends
 
-Working locally instead: `cp .env.example .env` and paste your own key. Bun
-loads `.env` automatically; `.gitignore` keeps it out of git.
+Reading this outside a workshop? Get your own key at
+[openrouter.ai/keys](https://openrouter.ai/keys), put a spending limit on it,
+and use the same `cp .env.example .env` step above. A full judge run plus a
+red-team run costs a few cents.
 
 ## Workshop flow (120 min)
 
@@ -218,9 +239,15 @@ entire system prompt (menu, rules, few-shot examples) to the customer in the
   and watching useless scores is step 1 of the exercise.
 - Costs: Hands-on 1 zero; a full judge run and a red-team run are each a
   few cents. A spending-limited key comfortably covers a 20-person session.
-- An attendee can print the shared key inside their own Codespace. That is
+- An attendee can print the shared key wherever they run the code. That is
   unavoidable — their code has to call the API with it — so treat the credit
-  limit, not secrecy, as the control, and revoke the key afterwards.
+  limit, not secrecy, as the control, and revoke the key afterwards. On a
+  public repo this is the whole reason the key is distributed in the room
+  rather than stored in the repository.
+- Run artifacts under `evals/*/results/` are committed as demo data, and they
+  embed provider error payloads. `run-model.ts` strips account identifiers and
+  caps their length before writing, because a public repo publishes whatever
+  those payloads happened to contain.
 - `bun test evals/01-deterministic` (Hands-on 1) is red by design, so CI runs
   `bun test solutions` for the repo's own health. See the comment in
   `.github/workflows/evals.yml`.
