@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "judgeModel": "anthropic/claude-sonnet-5",
+  "rubricId": "placeholder-hands-on-2-starter",
+  "rubricHash": "sha256:b831e45b8a41798d",
+  "labelSetVersion": "synthetic-v1",
+  "labelProvenance": "SYNTHETIC. These scores were derived by applying the anchors in solutions/rubric.ts to each fixture's KNOWN defect list — they are not blind human judgements. See README.md for what that does and does not prove, and replace this file with real labels before trusting a judge in production.",
+  "repeats": 1,
+  "startedAt": "2026-08-12T08:55:29.818Z",
+  "finishedAt": "2026-08-12T08:56:03.054Z",
+  "thresholds": {
+    "MIN_KAPPA": 0.6,
+    "MIN_SEVERE_RECALL": 0.8,
+    "MAX_SEVERE_INVERSIONS": 0
+  },
+  "metrics": {
+    "n": 13,
+    "exactAgreement": 0.3076923076923077,
+    "within1Agreement": 0.6923076923076923,
+    "offset": 0.3076923076923077,
+    "meanAbsError": 1.2307692307692308,
+    "spearman": 0.058652033103983696,
+    "quadraticWeightedKappa": 0.19031141868512125,
+    "inversions": 20,
+    "severeInversions": 5,
+    "severeRecall": 0.3333333333333333,
+    "selfAgreement": null,
+    "meanRunSpread": null,
+    "judgeCostUsd": 0.08931199999999999
+  },
+  "pass": false,
+  "cases": [
+    {
+      "caseId": "case-01",
+      "human": 5,
+      "judge": 5,
+      "runs": [
+        5
+      ]
+    },
+    {
+      "caseId": "case-02",
+      "human": 2,
+      "judge": 5,
+      "runs": [
+        5
+      ]
+    },
+    {
+      "caseId": "case-03",
+      "human": 2,
+      "judge": 3,
+      "runs": [
+        3
+      ]
+    },
+    {
+      "caseId": "case-04",
+      "human": 3,
+      "judge": 2,
+      "runs": [
+        2
+      ]
+    },
+    {
+      "caseId": "case-05",
+      "human": 2,
+      "judge": 4,
+      "runs": [
+        4
+      ]
+    },
+    {
+      "caseId": "case-06",
+      "human": 2,
+      "judge": 5,
+      "runs": [
+        5
+      ]
+    },
+    {
+      "caseId": "case-07",
+      "human": 2,
+      "judge": 2,
+      "runs": [
+        2
+      ]
+    },
+    {
+      "caseId": "case-08",
+      "human": 3,
+      "judge": 2,
+      "runs": [
+        2
+      ]
+    },
+    {
+      "caseId": "case-09",
+      "human": 3,
+      "judge": 3,
+      "runs": [
+        3
+      ]
+    },
+    {
+      "caseId": "case-10",
+      "human": 3,
+      "judge": 2,
+      "runs": [
+        2
+      ]
+    },
+    {
+      "caseId": "case-11",
+      "human": 1,
+      "judge": 2,
+      "runs": [
+        2
+      ]
+    },
+    {
+      "caseId": "case-12",
+      "human": 5,
+      "judge": 2,
+      "runs": [
+        2
+      ]
+    },
+    {
+      "caseId": "case-13",
+      "human": 5,
+      "judge": 5,
+      "runs": [
+        5
+      ]
+    }
+  ],
+  "severeInversionDetail": [
+    {
+      "betterCaseId": "case-12",
+      "worseCaseId": "case-02",
+      "humanGap": 3,
+      "judgeGap": -3
+    },
+    {
+      "betterCaseId": "case-12",
+      "worseCaseId": "case-03",
+      "humanGap": 3,
+      "judgeGap": -1
+    },
+    {
+      "betterCaseId": "case-12",
+      "worseCaseId": "case-05",
+      "humanGap": 3,
+      "judgeGap": -2
+    },
+    {
+      "betterCaseId": "case-12",
+      "worseCaseId": "case-06",
+      "humanGap": 3,
+      "judgeGap": -3
+    },
+    {
+      "betterCaseId": "case-12",
+      "worseCaseId": "case-09",
+      "humanGap": 2,
+      "judgeGap": -1
+    }
+  ]
+}
