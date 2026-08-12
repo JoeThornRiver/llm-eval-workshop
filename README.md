@@ -221,7 +221,13 @@ Six layers go in; one defensible verdict comes out.
 | 1:55 | Wrap-up | what they change on Monday | `docs/CHEATSHEET.md` |
 
 CI wiring (`.github/workflows/evals.yml`) folds into the 1:35 block as "how
-this runs unattended". An earlier revision of this workshop ended at the CI
+this runs unattended".
+
+**Running this session yourself?** `docs/instructor-call-sheet.html` is the
+trainer's runbook — open it in a browser. It is a time-blocked call sheet: what
+to run, what to say, the exact file to put on screen, the expected output of
+every command, the traps that eat the room, and what to cut when you are behind.
+Blocks are lettered A–G to match the table above. An earlier revision of this workshop ended at the CI
 block and treated Tiers 4–5 as optional extras; the arc above is stronger,
 because model acceptance is the problem the audience actually owns.
 
@@ -243,10 +249,14 @@ evals/
   03-redteam/            adversarial probes with verdict functions
   04-compare/            Tier 4 — one eval set vs many models (post-workshop)
   05-calibrate/          Tier 5 — is the judge worth trusting? (post-workshop)
+  06-mcp/                findings only, no code: evaluating MCP servers
 solutions/               full solutions — no peeking before you're green
   checks.ts              the Tier 1 checks as a module (Tier 4 imports these)
   rubric.ts              the calibrated judge rubric (Tier 4 imports this)
 docs/CHEATSHEET.md       the one-page take-away
+docs/instructor-call-sheet.html   the trainer's runbook — open it in a browser
+docs/DECK-HANDOVER.md    brief for updating the impulse deck
+docs/DECK-HANDOVER-MCP.md  brief for the MCP appendix slides
 .devcontainer/           Codespaces environment (Bun, no key baked in)
 .github/workflows/evals.yml  the CI tiering, itself a teaching artifact
 ```
@@ -301,6 +311,17 @@ That second model clears the deterministic gate on 100% of calls and scores a
 respectable 3.00 with the judge — and loses **all three** probes, returning the
 entire system prompt (menu, rules, few-shot examples) to the customer in the
 `clarification` field. Quality screening alone would have accepted it.
+
+## "We use MCP servers — does this apply?"
+
+Short answer: about two-thirds of it. The golden-dataset discipline, the
+gate-before-judge ordering, the judge calibration and the cost tiering all
+transfer; what changes is that the unit under test becomes a whole trajectory
+rather than a single call, so the harness transfers as discipline and not as
+code. And most of the official MCP threat model turns out to be OAuth and
+application security rather than model behaviour.
+
+Written up with sources in `evals/06-mcp/README.md` — findings only, no code.
 
 ## Design notes for trainers
 
